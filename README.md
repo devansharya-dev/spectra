@@ -7,8 +7,8 @@ Spectera is a full-stack web application designed to demonstrate the capabilitie
 ```mermaid
 graph TD
     User[User / Smart Glasses]
-    FE[Frontend (React + Vite)]
-    BE[Backend (Node.js + Express)]
+    FE["Frontend (React + Vite)"]
+    BE["Backend (Node.js + Express)"]
     
     subgraph Azure_Cloud [Azure AI Services]
         Vision[Computer Vision]
@@ -103,4 +103,8 @@ Deploy the Node.js application to Azure App Service or any compatible container/
 
 ## License
 
-Private and Proprietary.
+**Strictly Confidential & Proprietary.**
+
+Copyright (c) 2024 CyberShadowSensei. All Rights Reserved.
+
+Unauthorized copying, modification, distribution, or use of this file, via any medium, is strictly prohibited. This project is intended solely for the authorized recipient and must not be shared or reproduced without explicit written consent.
