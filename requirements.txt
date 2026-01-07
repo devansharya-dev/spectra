@@ -1,0 +1,10 @@
+System Requirements:
+- Node.js v18.0.0 or higher
+- NPM v9.0.0 or higher
+- FFmpeg (installed and added to system PATH for local development)
+
+Cloud Services (Azure Free Tier Compatible):
+- Azure Computer Vision (Image Analysis 3.2 or 4.0)
+- Azure Speech Services (Speech-to-Text)
+- Azure Translator
+- Azure App Service (for backend hosting)
