@@ -1,6 +1,11 @@
 import app from "./app.js";
-import { config } from "./config/env.js";
 
-app.listen(config.PORT, () => {
-  console.log(`Backend running on port ${config.PORT}`);
+const PORT = process.env.PORT;
+
+if (!PORT) {
+  throw new Error("PORT is not defined by Azure");
+}
+
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
 });
