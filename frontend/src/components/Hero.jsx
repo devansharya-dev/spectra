@@ -16,13 +16,14 @@ const Hero = () => {
     >
       {/* Video Background - subtle, not dominating */}
       <video
-        className="absolute inset-0 w-full h-full object-cover opacity-60"
+        className="absolute inset-0 w-full h-full object-cover opacity-60 sm:block"
         src="/video/Smart_Glasses_Change_Future_Video.mp4"
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
+        loading="lazy"
       />
 
       {/* Strong but elegant overlay */}

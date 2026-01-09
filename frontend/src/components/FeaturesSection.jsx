@@ -7,6 +7,19 @@ const Featured = () => {
   const [expanded, setExpanded] = useState(false);
   const videoRef = useRef(null);
 
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
   const toggleMute = () => {
     const newMuted = !muted;
     setMuted(newMuted);
@@ -78,9 +91,10 @@ const Featured = () => {
             {/* Blurred background video */}
             <video
               src="/video/demo1.mp4"
-              autoPlay
               loop
               muted
+              preload="metadata"
+              loading="lazy"
               className="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-40"
             />
 
@@ -88,11 +102,30 @@ const Featured = () => {
             <video
               ref={videoRef}
               src="/video/demo1.mp4"
-              autoPlay
               loop
               muted={muted}
+              preload="metadata"
+              loading="lazy"
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
               className="relative z-10 w-full h-full object-contain bg-transparent"
             />
+
+            {/* Play/Pause Button */}
+            {!isPlaying && (
+              <button
+                onClick={togglePlay}
+                className="absolute inset-0 flex items-center justify-center z-20"
+              >
+                <svg
+                  className="w-16 h-16 text-white bg-black/50 rounded-full"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </button>
+            )}
 
             {/* Mute Button */}
             <button

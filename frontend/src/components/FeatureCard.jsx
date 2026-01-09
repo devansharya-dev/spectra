@@ -5,9 +5,12 @@ const FeatureCard = ({ title, desc, videoSrc, onTry, showButton = true }) => {
       {/* Recorded video */}
       <video
         src={videoSrc}
-        autoPlay
         muted
         loop
+        preload="metadata"
+        loading="lazy"
+        onMouseOver={event => event.target.play()}
+        onMouseOut={event => event.target.pause()}
         className="rounded-lg border border-white/10 w-full h-auto"
       />
 
