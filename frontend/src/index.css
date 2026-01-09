@@ -42,7 +42,7 @@
   }
 
   .has-scroll-smooth [data-scroll-container] {
-    min-height: 100vh;
+    
   }
 
   [data-scroll-direction="horizontal"] [data-scroll-container] {

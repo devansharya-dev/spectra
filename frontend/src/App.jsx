@@ -11,45 +11,49 @@ function App() {
 
   useEffect(() => {
     let scroll;
+    const scrollElement = scrollRef.current;
 
-    // Small delay to ensure DOM is ready
     const initScroll = () => {
       scroll = new LocomotiveScroll({
-        el: scrollRef.current,
+        el: scrollElement,
         smooth: true,
         lerp: 0.08,
         direction: 'vertical',
         smartphone: {
           smooth: true,
-          lerp: 0.08
+          lerp: 0.1, // Slower lerp for mobile
         },
         tablet: {
           smooth: true,
-          lerp: 0.08
-        }
+          lerp: 0.1, // Slower lerp for tablet
+        },
       });
 
-      // Make scroll instance globally available
       window.locomotiveScroll = scroll;
     };
 
-    // Initialize after a short delay
-    setTimeout(initScroll, 100);
+    // Initialize after all content is loaded
+    window.addEventListener('load', initScroll);
 
-    // Update scroll on window resize
-    const handleResize = () => {
+    // Update scroll on resize using ResizeObserver
+    const resizeObserver = new ResizeObserver(() => {
       if (scroll) {
         scroll.update();
       }
-    };
+    });
 
-    window.addEventListener('resize', handleResize);
+    if (scrollElement) {
+      resizeObserver.observe(scrollElement);
+    }
 
     return () => {
+      window.removeEventListener('load', initScroll);
       if (scroll) {
         scroll.destroy();
       }
-      window.removeEventListener('resize', handleResize);
+      if (scrollElement) {
+        resizeObserver.unobserve(scrollElement);
+      }
       if (window.locomotiveScroll) {
         delete window.locomotiveScroll;
       }
@@ -58,7 +62,7 @@ function App() {
 
   return (
     <div ref={scrollRef} data-scroll-container className="bg-zinc-900 text-gray-100">
-      <Header />
+      <div><Header /></div>
       <Hero />
       <Features />
       <NewPage />

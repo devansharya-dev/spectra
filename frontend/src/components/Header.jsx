@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navItems = [
-  { name: 'Home', href: '#' },
+  { name: 'Home', href: '#home' },
   { name: 'Features', href: '#features' },
   { name: 'Demo', href: '#newpage' },
   { name: 'About', href: '#about' },
@@ -37,8 +37,6 @@ export function Header() {
   }, []);
 
   return (
-    <div className=' bg-zinc-900  font-normal flex  items-center justify-center '>
-
       <motion.header
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -135,9 +133,5 @@ export function Header() {
           )}
         </AnimatePresence>
       </motion.header>
-
-      {/* Spacer */}
-      <div className="h-20" />
-    </div>
   );
 }
