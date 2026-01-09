@@ -1,11 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 
+// 🔴 BACKEND BASE URL (FROM ENV)
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const DemoSession = ({ onExit }) => {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+
   const [error, setError] = useState(null);
   const [active, setActive] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
 
+  const [audioResult, setAudioResult] = useState(null);
+  const [visionResult, setVisionResult] = useState(null);
+
+  // =============================
+  // START CAMERA + MIC
+  // =============================
   useEffect(() => {
     async function startDevices() {
       try {
@@ -23,7 +37,6 @@ const DemoSession = ({ onExit }) => {
     }
 
     startDevices();
-
     return () => stopDevices();
   }, []);
 
@@ -42,21 +55,17 @@ const DemoSession = ({ onExit }) => {
 
   const handleExit = () => {
     stopDevices();
-    onExit(); // go back to feature cards
+    onExit();
   };
 
-  const mediaRecorderRef = useRef(null);
-  const audioChunksRef = useRef([]);
-  const [isRecording, setIsRecording] = useState(false);
-  const [audioResult, setAudioResult] = useState(null);
-  const [visionResult, setVisionResult] = useState(null);
-
+  // =============================
+  // AUDIO RECORDING
+  // =============================
   const startRecording = () => {
     if (!streamRef.current) return;
-    
-    // Check if browser supports MediaRecorder
+
     if (!window.MediaRecorder) {
-      setError("MediaRecorder not supported in this browser.");
+      setError("MediaRecorder not supported in this browser");
       return;
     }
 
@@ -72,14 +81,17 @@ const DemoSession = ({ onExit }) => {
 
     mediaRecorder.onstop = async () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+
       const formData = new FormData();
       formData.append("audio", audioBlob, "recording.wav");
 
       try {
-        const res = await fetch("http://localhost:5000/api/audio/process", {
+        const res = await fetch(`${API_BASE}/api/audio/process`, {
           method: "POST",
           body: formData,
         });
+
+        if (!res.ok) throw new Error("Audio API failed");
         const data = await res.json();
         setAudioResult(data);
       } catch (err) {
@@ -99,13 +111,51 @@ const DemoSession = ({ onExit }) => {
     }
   };
 
+  // =============================
+  // IMAGE / VISION INFERENCE
+  // =============================
+  const analyzeScene = async () => {
+    if (!videoRef.current) return;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(videoRef.current, 0, 0);
+
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+
+      const formData = new FormData();
+      formData.append("image", blob, "capture.jpg");
+
+      try {
+        const res = await fetch(`${API_BASE}/api/infer`, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) throw new Error("Vision API failed");
+        const data = await res.json();
+        setVisionResult(data);
+      } catch (err) {
+        console.error(err);
+        setError("Vision analysis failed");
+      }
+    }, "image/jpeg");
+  };
+
+  // =============================
+  // UI
+  // =============================
   return (
     <div className="flex flex-col items-center gap-4 mt-6">
       <video
         ref={videoRef}
         autoPlay
         playsInline
-        muted // Mute video feedback to avoid echo
+        muted
         className="w-[480px] rounded-lg border border-white/20"
       />
 
@@ -117,34 +167,7 @@ const DemoSession = ({ onExit }) => {
 
       <div className="flex gap-4">
         <button
-          onClick={async () => {
-            if (!videoRef.current) return;
-            
-            const canvas = document.createElement("canvas");
-            canvas.width = videoRef.current.videoWidth;
-            canvas.height = videoRef.current.videoHeight;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(videoRef.current, 0, 0);
-            
-            canvas.toBlob(async (blob) => {
-              if (!blob) return;
-              
-              const formData = new FormData();
-              formData.append("image", blob, "capture.jpg");
-              
-              try {
-                const res = await fetch("http://localhost:5000/api/infer", {
-                  method: "POST",
-                  body: formData,
-                });
-                const data = await res.json();
-                setVisionResult(data);
-              } catch (err) {
-                console.error(err);
-                setError("Vision analysis failed");
-              }
-            }, "image/jpeg");
-          }}
+          onClick={analyzeScene}
           className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500"
         >
           Analyze Scene
@@ -153,7 +176,9 @@ const DemoSession = ({ onExit }) => {
         <button
           onClick={isRecording ? stopRecording : startRecording}
           className={`px-5 py-2 text-white rounded-md ${
-            isRecording ? "bg-red-500 hover:bg-red-400" : "bg-purple-600 hover:bg-purple-500"
+            isRecording
+              ? "bg-red-500 hover:bg-red-400"
+              : "bg-purple-600 hover:bg-purple-500"
           }`}
         >
           {isRecording ? "Stop Listening" : "Start Listening"}
@@ -163,38 +188,25 @@ const DemoSession = ({ onExit }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl">
         {visionResult && (
           <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <h3 className="text-lg font-semibold text-blue-300 mb-2">Vision Analysis</h3>
-            <div className="mb-2">
-              <span className="text-gray-400 text-sm">Scene Description:</span>
-              <p className="text-white">{visionResult.label}</p>
-            </div>
-            {visionResult.message && visionResult.message !== "Scene analyzed" && (
-              <div>
-                <span className="text-gray-400 text-sm">Details:</span>
-                <p className="text-green-300">{visionResult.message}</p>
-              </div>
-            )}
+            <h3 className="text-lg font-semibold text-blue-300 mb-2">
+              Vision Analysis
+            </h3>
+            <p className="text-white">{visionResult.label}</p>
           </div>
         )}
 
         {audioResult && (
           <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <h3 className="text-lg font-semibold text-purple-300 mb-2">Audio Analysis</h3>
-            <div className="mb-2">
-              <span className="text-gray-400 text-sm">Transcript:</span>
-              <p className="text-white">{audioResult.transcript}</p>
-            </div>
-            <div>
-              <span className="text-gray-400 text-sm">Translation (ES):</span>
-              <p className="text-yellow-300">{audioResult.translation}</p>
-            </div>
+            <h3 className="text-lg font-semibold text-purple-300 mb-2">
+              Audio Analysis
+            </h3>
+            <p className="text-white">{audioResult.transcript}</p>
+            <p className="text-yellow-300">{audioResult.translation}</p>
           </div>
         )}
       </div>
 
-      {error && (
-        <p className="text-red-500">{error}</p>
-      )}
+      {error && <p className="text-red-500">{error}</p>}
 
       <button
         onClick={handleExit}
