@@ -25,7 +25,7 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row justify-between gap-24">
         <div className="md:w-1/2">
           <h1 className="text-[6vw] leading-none uppercase font-['BebasNeue'] tracking-wider">
-            Spectra
+            Augen
           </h1>
 
           <p className="mt-6 max-w-md text-gray-400 text-lg">
@@ -42,7 +42,7 @@ const Footer = () => {
             <ul className="space-y-3 text-lg capitalize">
               <li onClick={() => scrollToSection("#home")} className="cursor-pointer hover:text-white/80">Home</li>
               <li onClick={() => scrollToSection("#features")} className="cursor-pointer hover:text-white/80">Features</li>
-              <li onClick={() => scrollToSection("#newpage")} className="cursor-pointer hover:text-white/80">New Page</li>
+              <li onClick={() => scrollToSection("#newpage")} className="cursor-pointer hover:text-white/80">Demo</li>
               <li onClick={() => scrollToSection("#about")} className="cursor-pointer hover:text-white/80">About</li>
             </ul>
           </div>
@@ -61,7 +61,7 @@ const Footer = () => {
       </div>
 
       <div className="mt-24 pt-6 border-t border-white/10 flex justify-between text-sm text-gray-500">
-        <p>© 2025 Spectra</p>
+        <p>© 2025 Augen</p>
         <p>Designed for the future.</p>
       </div>
     </footer>
