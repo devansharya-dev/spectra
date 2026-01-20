@@ -6,6 +6,8 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const DemoSession = ({ onExit }) => {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
 
   const [active, setActive] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -45,21 +47,96 @@ const DemoSession = ({ onExit }) => {
   };
 
   // =============================
-  // BUTTON ACTIONS (CLEAN UI)
+  // BUTTON ACTIONS (REAL BACKEND)
   // =============================
-  const handleAnalyzeScene = () => {
+  const handleAnalyzeScene = async () => {
+    if (!videoRef.current) return;
+    setNote("Analyzing scene...");
     setSelectedModel("default");
-    setNote("Scene analysis running in demo mode · Backend not connected");
+
+    const canvas = document.createElement("canvas");
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(videoRef.current, 0, 0);
+
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+
+      const formData = new FormData();
+      formData.append("image", blob, "capture.jpg");
+
+      try {
+        const res = await fetch(`${API_BASE}/api/infer`, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) throw new Error("Vision API failed");
+        const data = await res.json();
+        // Display result in note to keep UI consistent
+        setNote(`Analysis: ${data.label || JSON.stringify(data)}`);
+      } catch (err) {
+        console.error(err);
+        setNote("Vision analysis failed");
+      }
+    }, "image/jpeg");
   };
 
   const handleStartListening = () => {
+    if (!streamRef.current) return;
+    
+    if (!window.MediaRecorder) {
+      setError("MediaRecorder not supported in this browser");
+      return;
+    }
+
+    setNote("Listening...");
     setIsRecording(true);
-    setNote("Please speak clearly in English");
+    audioChunksRef.current = [];
+
+    const mediaRecorder = new MediaRecorder(streamRef.current);
+    mediaRecorderRef.current = mediaRecorder;
+
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunksRef.current.push(event.data);
+      }
+    };
+
+    mediaRecorder.onstop = async () => {
+      setNote("Processing audio...");
+      const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+      const formData = new FormData();
+      formData.append("audio", audioBlob, "recording.wav");
+
+      try {
+        const res = await fetch(`${API_BASE}/api/audio/process`, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) throw new Error("Audio API failed");
+        const data = await res.json();
+        
+        // Format result for the existing UI note
+        const text = `Transcript: ${data.transcript} | Translation: ${data.translation}`;
+        setNote(text);
+      } catch (err) {
+        console.error(err);
+        setNote("Audio processing failed");
+      }
+    };
+
+    mediaRecorder.start();
   };
 
   const handleStopListening = () => {
-    setIsRecording(false);
-    setNote("");
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
   };
 
   const handleCustomModel = () => {
