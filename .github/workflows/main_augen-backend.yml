@@ -12,6 +12,10 @@ on:
 defaults:
   run:
     working-directory: backend
+    
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   build:
@@ -74,3 +78,4 @@ jobs:
          
 
           
+
