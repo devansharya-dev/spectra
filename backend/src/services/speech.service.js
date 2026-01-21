@@ -6,33 +6,42 @@ import path from "path";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
 
-// 🔴 FIX: Manually verify and fix ffmpeg path for Azure/Linux environments
+import sdk from "microsoft-cognitiveservices-speech-sdk";
+import ffmpeg from "fluent-ffmpeg";
+import ffmpegPath from "ffmpeg-static";
+import fs from "fs";
+import path from "path";
+import os from "os";
+import { v4 as uuidv4 } from "uuid";
+
+// 🔍 DEBUG: Extensive Path Resolution & Logging
 let validFfmpegPath = ffmpegPath;
+const searchPaths = [
+    ffmpegPath, // Original export
+    path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg"),
+    path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg.exe"),
+    path.join(process.cwd(), "..", "node_modules", "ffmpeg-static", "ffmpeg"),
+    // Azure sometimes puts it here
+    "/home/site/wwwroot/node_modules/ffmpeg-static/ffmpeg" 
+];
 
-// If the exported path doesn't exist, try to find it relative to CWD
-if (!validFfmpegPath || !fs.existsSync(validFfmpegPath)) {
-  const possiblePaths = [
-    path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg"), // Standard Linux path
-    path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg.exe"), // Windows path
-    path.join(process.cwd(), "..", "node_modules", "ffmpeg-static", "ffmpeg"), // One level up
-  ];
-
-  for (const p of possiblePaths) {
-    if (fs.existsSync(p)) {
-      validFfmpegPath = p;
-      break;
+// Try to find a valid path
+let found = false;
+for (const p of searchPaths) {
+    if (p && fs.existsSync(p)) {
+        validFfmpegPath = p;
+        found = true;
+        console.log(`[FFmpeg] ✅ Found binary at: ${p}`);
+        break;
     }
-  }
 }
 
-// Log for debugging (will show up in Azure logs)
-console.log(`[FFmpeg] Original path: ${ffmpegPath}`);
-console.log(`[FFmpeg] Resolved path: ${validFfmpegPath}`);
-
-if (validFfmpegPath) {
-  ffmpeg.setFfmpegPath(validFfmpegPath);
+if (!found) {
+    console.error("[FFmpeg] ❌ CRITICAL: Binary not found in any candidate path.");
+    console.error(`[FFmpeg] CWD: ${process.cwd()}`);
+    // We will attempt to use the default and let it fail, but we'll capture the fs state in the error later
 } else {
-  console.error("[FFmpeg] CRITICAL: Could not locate ffmpeg binary!");
+    ffmpeg.setFfmpegPath(validFfmpegPath);
 }
 
 /**
@@ -63,7 +72,38 @@ export const speechToText = async (audioBuffer) => {
         .audioChannels(1)
         .audioFrequency(16000)
         .on("end", resolve)
-        .on("error", reject)
+        .on("error", (err) => {
+            // 🔍 ENHANCED ERROR DEBUGGING
+            let debugInfo = `FFmpeg Error: ${err.message}. `;
+            
+            try {
+                // List contents of node_modules/ffmpeg-static to see if binary is there
+                const staticDir = path.join(process.cwd(), "node_modules", "ffmpeg-static");
+                if (fs.existsSync(staticDir)) {
+                    const files = fs.readdirSync(staticDir);
+                    debugInfo += ` [Contents of ${staticDir}: ${files.join(", ")}]`;
+                } else {
+                    debugInfo += ` [Dir ${staticDir} does not exist]`;
+                }
+                
+                // List root node_modules just in case
+                const nmDir = path.join(process.cwd(), "node_modules");
+                if (fs.existsSync(nmDir)) {
+                     // Just check if ffmpeg-static exists
+                     const hasStatic = fs.existsSync(path.join(nmDir, "ffmpeg-static"));
+                     debugInfo += ` [node_modules exists. Has ffmpeg-static? ${hasStatic}]`;
+                } else {
+                    debugInfo += ` [node_modules at ${nmDir} NOT FOUND]`;
+                }
+
+                debugInfo += ` [CWD: ${process.cwd()}]`;
+                debugInfo += ` [Attempted Path: ${validFfmpegPath}]`;
+            } catch (fsErr) {
+                debugInfo += ` [FS Debug Error: ${fsErr.message}]`;
+            }
+
+            reject(new Error(debugInfo));
+        })
         .save(tempOutput);
     });
 
