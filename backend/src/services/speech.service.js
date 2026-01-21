@@ -14,34 +14,56 @@ import path from "path";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
 
-// 🔍 DEBUG: Extensive Path Resolution & Logging
-let validFfmpegPath = ffmpegPath;
-const searchPaths = [
-    ffmpegPath, // Original export
-    path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg"),
-    path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg.exe"),
-    path.join(process.cwd(), "..", "node_modules", "ffmpeg-static", "ffmpeg"),
-    // Azure sometimes puts it here
-    "/home/site/wwwroot/node_modules/ffmpeg-static/ffmpeg" 
-];
+// 🔍 RESOLVE FFMPEG PATH
+let validFfmpegPath = null;
 
-// Try to find a valid path
-let found = false;
-for (const p of searchPaths) {
+// 1. Determine OS
+const platform = os.platform(); // 'win32', 'linux', 'darwin'
+const arch = os.arch();
+
+console.log(`[FFmpeg] Server OS: ${platform} (${arch})`);
+console.log(`[FFmpeg] CWD: ${process.cwd()}`);
+
+// 2. Define candidates based on OS
+const candidates = [];
+
+if (platform === "win32") {
+    candidates.push(
+        path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg.exe"),
+        path.join(process.cwd(), "..", "node_modules", "ffmpeg-static", "ffmpeg.exe"),
+        ffmpegPath // Fallback to package default
+    );
+} else {
+    // Linux/Mac (Azure uses Linux)
+    candidates.push(
+        path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg"),
+        "/home/site/wwwroot/node_modules/ffmpeg-static/ffmpeg", // Absolute Azure path
+        ffmpegPath // Fallback
+    );
+}
+
+// 3. Find first existing candidate
+for (const p of candidates) {
     if (p && fs.existsSync(p)) {
         validFfmpegPath = p;
-        found = true;
         console.log(`[FFmpeg] ✅ Found binary at: ${p}`);
         break;
     }
 }
 
-if (!found) {
-    console.error("[FFmpeg] ❌ CRITICAL: Binary not found in any candidate path.");
-    console.error(`[FFmpeg] CWD: ${process.cwd()}`);
-    // We will attempt to use the default and let it fail, but we'll capture the fs state in the error later
-} else {
+// 4. Critical Fallback for Azure:
+// If we are on Linux but didn't find the binary, it might mean we are running a Windows-deployed node_modules.
+// We will try to force the Linux path anyway, hoping it might be there but hidden or we missed it,
+// OR we error out with a very clear message.
+if (!validFfmpegPath && platform === "linux") {
+    console.warn("[FFmpeg] ⚠️ Binary not found. Forcing Azure default path...");
+    validFfmpegPath = "/home/site/wwwroot/node_modules/ffmpeg-static/ffmpeg";
+}
+
+if (validFfmpegPath) {
     ffmpeg.setFfmpegPath(validFfmpegPath);
+} else {
+    console.error("[FFmpeg] ❌ CRITICAL: Could not locate ffmpeg binary!");
 }
 
 /**
@@ -73,35 +95,7 @@ export const speechToText = async (audioBuffer) => {
         .audioFrequency(16000)
         .on("end", resolve)
         .on("error", (err) => {
-            // 🔍 ENHANCED ERROR DEBUGGING
-            let debugInfo = `FFmpeg Error: ${err.message}. `;
-            
-            try {
-                // List contents of node_modules/ffmpeg-static to see if binary is there
-                const staticDir = path.join(process.cwd(), "node_modules", "ffmpeg-static");
-                if (fs.existsSync(staticDir)) {
-                    const files = fs.readdirSync(staticDir);
-                    debugInfo += ` [Contents of ${staticDir}: ${files.join(", ")}]`;
-                } else {
-                    debugInfo += ` [Dir ${staticDir} does not exist]`;
-                }
-                
-                // List root node_modules just in case
-                const nmDir = path.join(process.cwd(), "node_modules");
-                if (fs.existsSync(nmDir)) {
-                     // Just check if ffmpeg-static exists
-                     const hasStatic = fs.existsSync(path.join(nmDir, "ffmpeg-static"));
-                     debugInfo += ` [node_modules exists. Has ffmpeg-static? ${hasStatic}]`;
-                } else {
-                    debugInfo += ` [node_modules at ${nmDir} NOT FOUND]`;
-                }
-
-                debugInfo += ` [CWD: ${process.cwd()}]`;
-                debugInfo += ` [Attempted Path: ${validFfmpegPath}]`;
-            } catch (fsErr) {
-                debugInfo += ` [FS Debug Error: ${fsErr.message}]`;
-            }
-
+            let debugInfo = `FFmpeg Error: ${err.message}. Path used: ${validFfmpegPath}`;
             reject(new Error(debugInfo));
         })
         .save(tempOutput);
