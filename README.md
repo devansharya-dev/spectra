@@ -4,10 +4,40 @@ Spectera is a comprehensive software platform designed for next-generation smart
 
 ## Architecture
 
+```mermaid
+graph TD
+    User((User))
+    subgraph Frontend [React Frontend]
+        UI[User Interface]
+        Media[Media Capture]
+    end
+    
+    subgraph Backend [Node.js Backend]
+        API[API Gateway]
+        Orchestrator[Service Orchestrator]
+    end
+    
+    subgraph Services [Azure AI Services]
+        Vision[Computer Vision]
+        Speech[Speech Service]
+        Trans[Translator]
+        YOLO[Custom YOLO Container]
+    end
+
+    User <--> UI
+    UI --> Media
+    Media --> API
+    API --> Orchestrator
+    Orchestrator --> Vision
+    Orchestrator --> Speech
+    Orchestrator --> Trans
+    Orchestrator --> YOLO
+```
+
 The system operates on a streamlined client-server model:
 
 1.  **Frontend (React + Vite)**: Handles media capture (camera/microphone), user interaction, and real-time data visualization.
-2.  **Backend (Node.js + Express)**: Serves as the central processing gateway. It manages API authentication, audio transcoding, and orchestrates requests to Azure AI Services for computer vision and speech processing.
+2.  **Backend (Node.js + Express)**: Serves as the central processing gateway. It manages API authentication, audio transcoding, and orchestrates requests to Azure AI Services and the custom YOLO container.
 
 ## Getting Started
 
