@@ -6,65 +6,7 @@ import path from "path";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
 
-import sdk from "microsoft-cognitiveservices-speech-sdk";
-import ffmpeg from "fluent-ffmpeg";
-import ffmpegPath from "ffmpeg-static";
-import fs from "fs";
-import path from "path";
-import os from "os";
-import { v4 as uuidv4 } from "uuid";
-
-// 🔍 RESOLVE FFMPEG PATH
-let validFfmpegPath = null;
-
-// 1. Determine OS
-const platform = os.platform(); // 'win32', 'linux', 'darwin'
-const arch = os.arch();
-
-console.log(`[FFmpeg] Server OS: ${platform} (${arch})`);
-console.log(`[FFmpeg] CWD: ${process.cwd()}`);
-
-// 2. Define candidates based on OS
-const candidates = [];
-
-if (platform === "win32") {
-    candidates.push(
-        path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg.exe"),
-        path.join(process.cwd(), "..", "node_modules", "ffmpeg-static", "ffmpeg.exe"),
-        ffmpegPath // Fallback to package default
-    );
-} else {
-    // Linux/Mac (Azure uses Linux)
-    candidates.push(
-        path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg"),
-        "/home/site/wwwroot/node_modules/ffmpeg-static/ffmpeg", // Absolute Azure path
-        ffmpegPath // Fallback
-    );
-}
-
-// 3. Find first existing candidate
-for (const p of candidates) {
-    if (p && fs.existsSync(p)) {
-        validFfmpegPath = p;
-        console.log(`[FFmpeg] ✅ Found binary at: ${p}`);
-        break;
-    }
-}
-
-// 4. Critical Fallback for Azure:
-// If we are on Linux but didn't find the binary, it might mean we are running a Windows-deployed node_modules.
-// We will try to force the Linux path anyway, hoping it might be there but hidden or we missed it,
-// OR we error out with a very clear message.
-if (!validFfmpegPath && platform === "linux") {
-    console.warn("[FFmpeg] ⚠️ Binary not found. Forcing Azure default path...");
-    validFfmpegPath = "/home/site/wwwroot/node_modules/ffmpeg-static/ffmpeg";
-}
-
-if (validFfmpegPath) {
-    ffmpeg.setFfmpegPath(validFfmpegPath);
-} else {
-    console.error("[FFmpeg] ❌ CRITICAL: Could not locate ffmpeg binary!");
-}
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 /**
  * Converts audio buffer to text using Azure Speech SDK
@@ -94,10 +36,7 @@ export const speechToText = async (audioBuffer) => {
         .audioChannels(1)
         .audioFrequency(16000)
         .on("end", resolve)
-        .on("error", (err) => {
-            let debugInfo = `FFmpeg Error: ${err.message}. Path used: ${validFfmpegPath}`;
-            reject(new Error(debugInfo));
-        })
+        .on("error", reject)
         .save(tempOutput);
     });
 
