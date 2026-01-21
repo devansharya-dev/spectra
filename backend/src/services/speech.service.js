@@ -6,7 +6,34 @@ import path from "path";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
 
-ffmpeg.setFfmpegPath(ffmpegPath);
+// 🔴 FIX: Manually verify and fix ffmpeg path for Azure/Linux environments
+let validFfmpegPath = ffmpegPath;
+
+// If the exported path doesn't exist, try to find it relative to CWD
+if (!validFfmpegPath || !fs.existsSync(validFfmpegPath)) {
+  const possiblePaths = [
+    path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg"), // Standard Linux path
+    path.join(process.cwd(), "node_modules", "ffmpeg-static", "ffmpeg.exe"), // Windows path
+    path.join(process.cwd(), "..", "node_modules", "ffmpeg-static", "ffmpeg"), // One level up
+  ];
+
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      validFfmpegPath = p;
+      break;
+    }
+  }
+}
+
+// Log for debugging (will show up in Azure logs)
+console.log(`[FFmpeg] Original path: ${ffmpegPath}`);
+console.log(`[FFmpeg] Resolved path: ${validFfmpegPath}`);
+
+if (validFfmpegPath) {
+  ffmpeg.setFfmpegPath(validFfmpegPath);
+} else {
+  console.error("[FFmpeg] CRITICAL: Could not locate ffmpeg binary!");
+}
 
 /**
  * Converts audio buffer to text using Azure Speech SDK
