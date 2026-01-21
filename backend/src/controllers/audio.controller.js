@@ -26,6 +26,9 @@ export const processAudio = async (req, res) => {
 
   } catch (error) {
     console.error("Audio Processing Error:", error);
-    res.status(500).json({ error: "Failed to process audio" });
+    res.status(500).json({ 
+      error: "Failed to process audio",
+      details: error.message
+    });
   }
 };
