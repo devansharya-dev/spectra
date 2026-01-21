@@ -4,6 +4,7 @@
   "type": "module",
   "main": "src/server.js",
   "scripts": {
+    "prestart": "node src/scripts/ensure-ffmpeg.js",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js"
   },
