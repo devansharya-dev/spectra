@@ -5,9 +5,13 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
+import { fileURLToPath } from 'url';
 
-// Don't set path globally at startup to avoid crashes. 
-// We will set it just-in-time inside the function or use the default if it looks okay.
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// BUNDLED BINARY PATH (Relative to this file)
+const bundledFfmpegPath = path.join(__dirname, '../bin/ffmpeg');
 
 /**
  * Converts audio buffer to text using Azure Speech SDK
@@ -23,31 +27,29 @@ export const speechToText = async (audioBuffer) => {
     return "Mock transcript: Azure Speech credentials are not configured.";
   }
 
-  // 🛠️ RUNTIME FFMPEG PATH FIX
-  // This runs per-request, so it won't crash the server on startup (503).
-  let effectiveFfmpegPath = ffmpegPath;
-  
-  // Check for the specific broken path pattern seen in Azure logs
-  if (effectiveFfmpegPath && effectiveFfmpegPath.startsWith('/node_modules')) {
-      // It's trying to look at system root. Fix it to Azure root.
-      const fixedPath = '/home/site/wwwroot' + effectiveFfmpegPath;
-      if (fs.existsSync(fixedPath)) {
-          console.log(`[FFmpeg] 🛠️ Fixed broken path. Using: ${fixedPath}`);
-          effectiveFfmpegPath = fixedPath;
+  // 🛠️ DETERMINISTIC PATH SELECTION
+  let selectedPath = ffmpegPath; // Default (works on Windows dev)
+
+  if (os.platform() === 'linux') {
+      // On Azure Linux, use the binary we manually bundled
+      if (fs.existsSync(bundledFfmpegPath)) {
+          console.log(`[FFmpeg] Using bundled Linux binary: ${bundledFfmpegPath}`);
+          selectedPath = bundledFfmpegPath;
+          
+          // Ensure it's executable
+          try {
+            fs.chmodSync(selectedPath, 0o755);
+          } catch (e) { /* ignore */ }
       } else {
-          console.warn(`[FFmpeg] ⚠️ Tried to fix path to ${fixedPath} but file not found.`);
-          // If the file is truly missing, we can't do much, but let's try the standard Azure location
-          const standardAzurePath = '/home/site/wwwroot/node_modules/ffmpeg-static/ffmpeg';
-          if (fs.existsSync(standardAzurePath)) {
-              console.log(`[FFmpeg] 🛠️ Found binary at standard Azure path: ${standardAzurePath}`);
-              effectiveFfmpegPath = standardAzurePath;
+          console.error(`[FFmpeg] ❌ Bundled binary missing at ${bundledFfmpegPath}`);
+          // Fallback to trying the standard path fix just in case
+          if (selectedPath && selectedPath.startsWith('/node_modules')) {
+             selectedPath = '/home/site/wwwroot' + selectedPath;
           }
       }
   }
-  
-  // Apply the path
-  ffmpeg.setFfmpegPath(effectiveFfmpegPath);
 
+  ffmpeg.setFfmpegPath(selectedPath);
 
   const tempInput = path.join(os.tmpdir(), `${uuidv4()}.webm`);
   const tempOutput = path.join(os.tmpdir(), `${uuidv4()}.wav`);
@@ -64,7 +66,7 @@ export const speechToText = async (audioBuffer) => {
         .audioFrequency(16000)
         .on("end", resolve)
         .on("error", (err) => {
-            console.error(`[FFmpeg] Transcoding Error with path '${effectiveFfmpegPath}':`, err);
+            console.error(`[FFmpeg] Transcoding Error using ${selectedPath}:`, err);
             reject(err);
         })
         .save(tempOutput);
