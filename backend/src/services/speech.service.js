@@ -10,8 +10,9 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// BUNDLED BINARY PATH (Relative to this file)
-const bundledFfmpegPath = path.join(__dirname, '../bin/ffmpeg');
+// BUNDLED BINARY PATH (Relative to backend/src/services/)
+// We need to go up two levels: services -> src -> backend
+const bundledFfmpegPath = path.join(__dirname, '../../bin/ffmpeg');
 
 /**
  * Converts audio buffer to text using Azure Speech SDK
