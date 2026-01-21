@@ -6,43 +6,7 @@ import path from "path";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
 
-/**
- * 🛠️ ROBUST FFMPEG RESOLVER
- * Attempts to find the ffmpeg binary across different environments (Local vs Azure)
- */
-const getValidFfmpegPath = () => {
-  try {
-    const isWin = os.platform() === "win32";
-    const binName = isWin ? "ffmpeg.exe" : "ffmpeg";
-    
-    // Candidates in order of preference
-    const candidates = [
-      ffmpegPath, // 1. Path provided by ffmpeg-static package
-      path.join(process.cwd(), "node_modules", "ffmpeg-static", binName), // 2. Local node_modules
-      path.join(process.cwd(), "..", "node_modules", "ffmpeg-static", binName), // 3. Parent node_modules
-      `/home/site/wwwroot/node_modules/ffmpeg-static/${binName}` // 4. Explicit Azure Linux path
-    ];
-
-    for (const p of candidates) {
-      if (p && fs.existsSync(p)) {
-        console.log(`[FFmpeg] Binary found at: ${p}`);
-        return p;
-      }
-    }
-
-    console.warn("[FFmpeg] No binary found in candidate paths. Falling back to package default.");
-    return ffmpegPath;
-  } catch (err) {
-    console.error("[FFmpeg] Resolver error:", err.message);
-    return ffmpegPath;
-  }
-};
-
-// Apply path
-const resolvedPath = getValidFfmpegPath();
-if (resolvedPath) {
-  ffmpeg.setFfmpegPath(resolvedPath);
-}
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 /**
  * Converts audio buffer to text using Azure Speech SDK
@@ -72,10 +36,7 @@ export const speechToText = async (audioBuffer) => {
         .audioChannels(1)
         .audioFrequency(16000)
         .on("end", resolve)
-        .on("error", (err) => {
-          console.error("[FFmpeg] Transcoding failed:", err.message);
-          reject(new Error(`FFmpeg failed: ${err.message}. Path: ${resolvedPath}`));
-        })
+        .on("error", reject)
         .save(tempOutput);
     });
 
