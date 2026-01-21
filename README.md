@@ -1,6 +1,6 @@
 # Spectera
 
-Spectera is a comprehensive software platform designed for next-generation smart glasses. It orchestrates real-time visual analysis, speech transcription, and multi-language translation through a unified interface, bridging the gap between physical perception and digital intelligence.
+Spectera is a comprehensive software platform designed for demonstartion of next-generation smart glasses. It orchestrates real-time visual analysis, speech transcription, and multi-language translation through a unified interface, bridging the gap between physical perception and digital intelligence.
 
 ## Architecture
 
