@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import inferenceRoutes from "./routes/inference.routes.js";
 import audioRoutes from "./routes/audio.routes.js";
+import customRoutes from "./routes/custom.routes.js";
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.get("/", (req, res) => {
 
 app.use("/api/infer", inferenceRoutes);
 app.use("/api/audio", audioRoutes);
+app.use("/api/custom", customRoutes);
 
 export default app;

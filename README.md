@@ -1,110 +1,48 @@
-# Spectera: AI-Powered Smart Glasses Platform
+# Spectera
 
-Spectera is a full-stack web application designed to demonstrate the capabilities of next-generation smart glasses. It integrates real-time visual analysis, speech transcription, and language translation into a unified interface, bridging the gap between physical perception and digital intelligence.
+Spectera is a comprehensive software platform designed for next-generation smart glasses. It orchestrates real-time visual analysis, speech transcription, and multi-language translation through a unified interface, bridging the gap between physical perception and digital intelligence.
 
-## System Architecture
+## Architecture
 
-```mermaid
-graph TD
-    User[User / Smart Glasses]
-    FE["Frontend (React + Vite)"]
-    BE["Backend (Node.js + Express)"]
-    
-    subgraph Azure_Cloud [Azure AI Services]
-        Vision[Computer Vision]
-        Speech[Speech Service]
-        Trans[Translator]
-    end
+The system operates on a streamlined client-server model:
 
-    User -->|Interacts| FE
-    FE -->|HTTP/REST| BE
-    
-    BE -->|Image Data| Vision
-    BE -->|Audio Data| Speech
-    BE -->|Text Data| Trans
-    
-    Vision -->|Scene Description| BE
-    Speech -->|Transcript| BE
-    Trans -->|Translation| BE
-    
-    BE -->|JSON Response| FE
-    FE -->|Visual Feedback| User
-```
+1.  **Frontend (React + Vite)**: Handles media capture (camera/microphone), user interaction, and real-time data visualization.
+2.  **Backend (Node.js + Express)**: Serves as the central processing gateway. It manages API authentication, audio transcoding, and orchestrates requests to Azure AI Services for computer vision and speech processing.
 
-## Project Overview
+## Getting Started
 
-The solution is divided into two main components:
+### Backend Setup
 
-1.  **Frontend**: A responsive React application providing the user interface for camera and microphone interaction. It handles media capture and displays real-time AI insights.
-2.  **Backend**: A robust Node.js service acting as the gateway to Azure AI. It handles API authentication, audio transcoding (using FFmpeg), and data orchestration.
+1.  Navigate to the `backend` directory.
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Configure environment variables in a `.env` file (refer to administrator documentation for keys).
+4.  Start the server:
+    ```bash
+    npm run dev
+    ```
 
-## Prerequisites
+### Frontend Setup
 
-Refer to `requirements.txt` for specific version numbers and service dependencies.
+1.  Navigate to the `frontend` directory.
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Start the development server:
+    ```bash
+    npm run dev
+    ```
 
-## Installation & Setup
-
-### 1. Backend Configuration
-
-Navigate to the backend directory and install dependencies:
-
-```bash
-cd backend
-npm install
-```
-
-Create a `.env` file in the `backend` directory with your Azure credentials:
-
-```env
-PORT=5000
-AZURE_VISION_ENDPOINT=<your_endpoint>
-AZURE_VISION_KEY=<your_key>
-AZURE_SPEECH_KEY=<your_key>
-AZURE_SPEECH_REGION=<your_region>
-AZURE_TRANSLATOR_KEY=<your_key>
-AZURE_TRANSLATOR_REGION=<your_region>
-AZURE_TRANSLATOR_ENDPOINT=https://api.cognitive.microsofttranslator.com
-```
-
-Start the backend server:
-
-```bash
-npm run dev
-```
-
-### 2. Frontend Configuration
-
-Navigate to the frontend directory and install dependencies:
-
-```bash
-cd frontend
-npm install
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Access the application at `http://localhost:5173`.
+The application will be accessible at `http://localhost:5173`.
 
 ## Deployment
 
-### Frontend
-Build the optimized static assets:
-```bash
-npm run build
-```
-Deploy the `dist` folder to any static hosting provider (e.g., Azure Static Web Apps, Netlify, Vercel).
-
-### Backend
-Deploy the Node.js application to Azure App Service or any compatible container/server environment. Ensure environment variables are correctly configured in the production environment.
+-   **Frontend**: Execute `npm run build` to generate static assets in the `dist` folder. These can be hosted on any static web hosting service.
+-   **Backend**: Deploy the application to a Node.js runtime environment (e.g., Azure App Service). Ensure all environment variables are correctly set in the production configuration.
 
 ## License
 
-**Strictly Confidential & Proprietary.**
-
-Copyright (c) 2024 CyberShadowSensei. All Rights Reserved.
-
-Unauthorized copying, modification, distribution, or use of this file, via any medium, is strictly prohibited. This project is intended solely for the authorized recipient and must not be shared or reproduced without explicit written consent.
+Copyright (c) 2026. All Rights Reserved.
