@@ -6,7 +6,8 @@ import path from "path";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
 
-ffmpeg.setFfmpegPath(ffmpegPath);
+// Don't set path globally at startup to avoid crashes. 
+// We will set it just-in-time inside the function or use the default if it looks okay.
 
 /**
  * Converts audio buffer to text using Azure Speech SDK
@@ -22,6 +23,32 @@ export const speechToText = async (audioBuffer) => {
     return "Mock transcript: Azure Speech credentials are not configured.";
   }
 
+  // 🛠️ RUNTIME FFMPEG PATH FIX
+  // This runs per-request, so it won't crash the server on startup (503).
+  let effectiveFfmpegPath = ffmpegPath;
+  
+  // Check for the specific broken path pattern seen in Azure logs
+  if (effectiveFfmpegPath && effectiveFfmpegPath.startsWith('/node_modules')) {
+      // It's trying to look at system root. Fix it to Azure root.
+      const fixedPath = '/home/site/wwwroot' + effectiveFfmpegPath;
+      if (fs.existsSync(fixedPath)) {
+          console.log(`[FFmpeg] 🛠️ Fixed broken path. Using: ${fixedPath}`);
+          effectiveFfmpegPath = fixedPath;
+      } else {
+          console.warn(`[FFmpeg] ⚠️ Tried to fix path to ${fixedPath} but file not found.`);
+          // If the file is truly missing, we can't do much, but let's try the standard Azure location
+          const standardAzurePath = '/home/site/wwwroot/node_modules/ffmpeg-static/ffmpeg';
+          if (fs.existsSync(standardAzurePath)) {
+              console.log(`[FFmpeg] 🛠️ Found binary at standard Azure path: ${standardAzurePath}`);
+              effectiveFfmpegPath = standardAzurePath;
+          }
+      }
+  }
+  
+  // Apply the path
+  ffmpeg.setFfmpegPath(effectiveFfmpegPath);
+
+
   const tempInput = path.join(os.tmpdir(), `${uuidv4()}.webm`);
   const tempOutput = path.join(os.tmpdir(), `${uuidv4()}.wav`);
 
@@ -36,7 +63,10 @@ export const speechToText = async (audioBuffer) => {
         .audioChannels(1)
         .audioFrequency(16000)
         .on("end", resolve)
-        .on("error", reject)
+        .on("error", (err) => {
+            console.error(`[FFmpeg] Transcoding Error with path '${effectiveFfmpegPath}':`, err);
+            reject(err);
+        })
         .save(tempOutput);
     });
 
