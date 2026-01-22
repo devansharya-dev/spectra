@@ -12,6 +12,8 @@ const DemoSession = ({ onExit }) => {
   const [active, setActive] = useState(false);
   const [error, setError] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [showVisionTip, setShowVisionTip] = useState(false);
+  const [showAudioTip, setShowAudioTip] = useState(false);
 
   // 🔹 Independent results (backend-only)
   const [visionResult, setVisionResult] = useState(null);
@@ -62,6 +64,7 @@ const DemoSession = ({ onExit }) => {
   // =============================
   const handleAnalyzeScene = async () => {
     if (!videoRef.current) return;
+    setShowVisionTip(true);
 
     const canvas = document.createElement("canvas");
     canvas.width = videoRef.current.videoWidth;
@@ -103,6 +106,7 @@ const DemoSession = ({ onExit }) => {
   // =============================
   const startRecording = () => {
     if (!streamRef.current || !window.MediaRecorder) return;
+    setShowAudioTip(true);
 
     const recorder = new MediaRecorder(streamRef.current);
     mediaRecorderRef.current = recorder;
@@ -148,6 +152,7 @@ const DemoSession = ({ onExit }) => {
   // =============================
   const handleCustomModel = async () => {
     if (!videoRef.current) return;
+    setShowVisionTip(true);
 
     const canvas = document.createElement("canvas");
     canvas.width = videoRef.current.videoWidth;
@@ -198,6 +203,22 @@ const DemoSession = ({ onExit }) => {
       />
 
       {active && <p className="text-green-400 text-sm">Camera & Mic active</p>}
+
+      {/* TIP BOXES */}
+      <div className="flex flex-col gap-2 w-[480px]">
+        {showVisionTip && (
+          <div className="p-3 bg-blue-900/40 border border-blue-500/50 rounded text-xs text-blue-200">
+            Tip: The environment should be well lit and camera well positioned.
+          </div>
+        )}
+        {showAudioTip && (
+          <div className="p-3 bg-purple-900/40 border border-purple-500/50 rounded text-xs text-purple-200">
+            Speak in English; the STT and translation will happen automatically into Spanish. 
+            <br />
+            <span className="opacity-70 italic text-[10px]">Note: For simplicity and demo purpose, the model working of all 3 features are limited.</span>
+          </div>
+        )}
+      </div>
 
       {/* BUTTONS */}
       <div className="flex gap-4">
