@@ -194,6 +194,11 @@ const DemoSession = ({ onExit }) => {
   // =============================
   return (
     <div className="flex flex-col items-center gap-4 mt-6">
+      {/* PERSISTENT DEMO NOTICE */}
+      <div className="w-[480px] p-3 bg-amber-900/20 border border-amber-500/30 rounded text-center text-[11px] text-amber-200/80">
+        Note: For simplicity and demo purpose, the model working of all 3 features are limited.
+      </div>
+
       <video
         ref={videoRef}
         autoPlay
@@ -207,15 +212,13 @@ const DemoSession = ({ onExit }) => {
       {/* TIP BOXES */}
       <div className="flex flex-col gap-2 w-[480px]">
         {showVisionTip && (
-          <div className="p-3 bg-blue-900/40 border border-blue-500/50 rounded text-xs text-blue-200">
+          <div className="p-3 bg-blue-900/40 border border-blue-500/50 rounded text-xs text-blue-200 text-center">
             Tip: The environment should be well lit and camera well positioned.
           </div>
         )}
         {showAudioTip && (
-          <div className="p-3 bg-purple-900/40 border border-purple-500/50 rounded text-xs text-purple-200">
+          <div className="p-3 bg-purple-900/40 border border-purple-500/50 rounded text-xs text-purple-200 text-center">
             Speak in English; the STT and translation will happen automatically into Spanish. 
-            <br />
-            <span className="opacity-70 italic text-[10px]">Note: For simplicity and demo purpose, the model working of all 3 features are limited.</span>
           </div>
         )}
       </div>
