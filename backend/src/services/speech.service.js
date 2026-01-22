@@ -10,6 +10,10 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import { Readable, PassThrough } from 'stream';
+
+// ... imports (keep existing imports)
+
 // BUNDLED BINARY PATH (Relative to backend/src/services/)
 // We need to go up two levels: services -> src -> backend
 const bundledFfmpegPath = path.join(__dirname, '../../bin/ffmpeg');
@@ -52,41 +56,47 @@ export const speechToText = async (audioBuffer) => {
 
   ffmpeg.setFfmpegPath(selectedPath);
 
-  const tempInput = path.join(os.tmpdir(), `${uuidv4()}.webm`);
-  const tempOutput = path.join(os.tmpdir(), `${uuidv4()}.wav`);
-
   try {
-    // 1. Write buffer to temp file
-    await fs.promises.writeFile(tempInput, audioBuffer);
-
-    // 2. Transcode to PCM WAV (16kHz, 16-bit, Mono)
-    await new Promise((resolve, reject) => {
-      ffmpeg(tempInput)
-        .toFormat("wav")
-        .audioChannels(1)
-        .audioFrequency(16000)
-        .on("end", resolve)
-        .on("error", (err) => {
-            console.error(`[FFmpeg] Transcoding Error using ${selectedPath}:`, err);
-            reject(err);
-        })
-        .save(tempOutput);
-    });
-
-    // 3. Read the clean WAV file
-    const wavBuffer = await fs.promises.readFile(tempOutput);
-
-    // 4. Send to Azure Speech SDK
-    const speechConfig = sdk.SpeechConfig.fromSubscription(speechKey, speechRegion);
-    speechConfig.speechRecognitionLanguage = "en-US";
+    // 1. Setup Streams (No Disk I/O)
+    const inputStream = new Readable();
+    inputStream.push(audioBuffer);
+    inputStream.push(null); // Signal end of data
 
     const pushStream = sdk.AudioInputStream.createPushStream();
-    pushStream.write(wavBuffer);
-    pushStream.close();
-
+    
+    // 2. Setup Azure Recognizer
+    const speechConfig = sdk.SpeechConfig.fromSubscription(speechKey, speechRegion);
+    speechConfig.speechRecognitionLanguage = "en-US";
+    
     const audioConfig = sdk.AudioConfig.fromStreamInput(pushStream);
     const recognizer = new sdk.SpeechRecognizer(speechConfig, audioConfig);
 
+    // 3. Start Transcoding Pipe
+    const transcodingProcess = ffmpeg(inputStream)
+      .toFormat("wav")
+      .audioChannels(1)
+      .audioFrequency(16000)
+      .on("error", (err) => {
+          console.error(`[FFmpeg] Transcoding Error using ${selectedPath}:`, err);
+          // We can't easily reject the main promise from here if recognition is already running,
+          // but closing the push stream might trigger a cancellation.
+          pushStream.close(); 
+      });
+
+    // Create a pass-through stream to pipe FFmpeg output to Azure
+    const passThrough = new PassThrough();
+    
+    transcodingProcess.pipe(passThrough);
+
+    passThrough.on('data', (chunk) => {
+        pushStream.write(chunk);
+    });
+
+    passThrough.on('end', () => {
+        pushStream.close();
+    });
+
+    // 4. Start Recognition (Concurrent with transcoding)
     const transcript = await new Promise((resolve, reject) => {
       recognizer.recognizeOnceAsync(
         (result) => {
@@ -112,13 +122,5 @@ export const speechToText = async (audioBuffer) => {
   } catch (error) {
     console.error("Transcoding/Speech Error:", error);
     throw error;
-  } finally {
-    // 5. Cleanup
-    try {
-      if (fs.existsSync(tempInput)) await fs.promises.unlink(tempInput);
-      if (fs.existsSync(tempOutput)) await fs.promises.unlink(tempOutput);
-    } catch (cleanupErr) {
-      console.warn("Cleanup failed:", cleanupErr);
-    }
   }
 };
