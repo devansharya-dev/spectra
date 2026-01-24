@@ -29,9 +29,9 @@ const NewPage = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
               <FeatureCard
-                title="Automation"
-                desc="Trigger workflows automatically."
-                videoSrc="/video/demo1.mp4"
+                title="Object Detection"
+                desc="Detects and identifies objects in real time from live camera input, helping users understand their surroundings instantly."
+                imageSrc="/images/M.jpeg"
                 onTry={() => handleTry("automation")}
               />
 
@@ -42,9 +42,9 @@ const NewPage = () => {
               </div>
 
               <FeatureCard
-                title="AI Insights"
-                desc="Understand your data instantly."
-                videoSrc="/video/demo1.mp4"
+                title="Speech to Text"
+                desc="Converts spoken language into accurate text in real time, enabling hands-free interaction and seamless communication."
+                imageSrc="/images/i.jpeg"
                 onTry={() => handleTry("insights")}
               />
             </div>

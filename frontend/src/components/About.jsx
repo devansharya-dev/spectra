@@ -52,18 +52,58 @@ const About = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
              {[
-              { name: "Shriyukt Gupta", role: "Lead Architect & AI/ML Specialist" },
-              { name: "Devansh Arya", role: "AI/ML Specialist & Full-stack Developer" },
-              { name: "Divya Adhikari", role: "Embedded Systems Specialist & Full-stack Engineer" },
-              { name: "Shubhanshi Negi", role: "AI & Backend Engineer" },
+              
+              {
+                name: "Shriyukt Gupta",
+                role: "Lead Architect & AI/ML Specialist",
+                email: "shriyuktgupta@gmail.com",
+                linkedin: "https://www.linkedin.com/in/shriyukt-gupta-12b665277",
+              },
+              {
+                name: "Devansh Arya",
+                role: "AI/ML Specialist & Full-stack Developer",
+                email: "devansharya12345@gmail.com",
+                linkedin: "https://www.linkedin.com/in/devansh-arya-415378305/",
+              },
+              {
+                name: "Divya Adhikari",
+                role: "Embedded Systems Specialist & Full-stack Engineer",
+                email: "divyaadikhari65@gmail.com",
+                linkedin: "https://www.linkedin.com/in/divya-adhikari-213269325",
+              },
+              {
+                name: "Shubhanshi Negi",
+                role: "AI & Backend Engineer",
+                email: "shubhanshinegi@gmail.com",
+                linkedin: "https://www.linkedin.com/in/shubhanshi-negi-0a4352338",
+              },
             ].map((member, index) => (
               <div key={index} className="text-center md:text-left">
-                <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-2">
+                <h3 className="text-lg md:text-xl font-semibold mb-2">
                   {member.name}
                 </h3>
+
                 <p className="text-zinc-800 text-sm md:text-base leading-relaxed">
                   {member.role}
                 </p>
+
+                <div className="mt-3 flex justify-center md:justify-start gap-4 text-sm">
+                  <a
+                    href={`mailto:${member.email}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Email
+                  </a>
+
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    LinkedIn
+                  </a>
+                </div>
               </div>
             ))}
           </div>

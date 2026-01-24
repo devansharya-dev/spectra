@@ -40,21 +40,30 @@ const Footer = () => {
               Pages
             </p>
             <ul className="space-y-3 text-lg capitalize">
-              <li onClick={() => scrollToSection("#home")} className="cursor-pointer hover:text-white/80">Home</li>
-              <li onClick={() => scrollToSection("#features")} className="cursor-pointer hover:text-white/80">Features</li>
-              <li onClick={() => scrollToSection("#newpage")} className="cursor-pointer hover:text-white/80">Demo</li>
-              <li onClick={() => scrollToSection("#about")} className="cursor-pointer hover:text-white/80">About</li>
-            </ul>
-          </div>
-
-          <div>
-            <p className="mb-6 text-gray-500 uppercase tracking-wide text-sm">
-              Connect
-            </p>
-            <ul className="space-y-3 text-lg capitalize">
-              <li><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white/80">Instagram</a></li>
-              <li><a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white/80">LinkedIn</a></li>
-              <li><a href="https://x.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white/80">X / Twitter</a></li>
+              <li
+                onClick={() => scrollToSection("#home")}
+                className="cursor-pointer hover:text-white/80"
+              >
+                Home
+              </li>
+              <li
+                onClick={() => scrollToSection("#features")}
+                className="cursor-pointer hover:text-white/80"
+              >
+                Features
+              </li>
+              <li
+                onClick={() => scrollToSection("#newpage")}
+                className="cursor-pointer hover:text-white/80"
+              >
+                Demo
+              </li>
+              <li
+                onClick={() => scrollToSection("#about")}
+                className="cursor-pointer hover:text-white/80"
+              >
+                About
+              </li>
             </ul>
           </div>
         </div>

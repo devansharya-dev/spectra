@@ -1,18 +1,37 @@
-const FeatureCard = ({ title, desc, videoSrc, onTry, showButton = true }) => {
-  return (
-    <div className="border border-white/20 rounded-xl p-1 md:p-2 flex flex-col gap-1 md:gap-2 hover:shadow-lg hover:shadow-white/10 transition-all duration-300 hover:scale-105">
+const FeatureCard = ({
+  title,
+  desc,
+  videoSrc,
+  imageSrc,
+  onTry,
+  showButton = true,
+  className = "",
+}) => {
+  const showVideo = Boolean(videoSrc);
+  const showImage = !showVideo && Boolean(imageSrc);
 
-      {/* Recorded video */}
-      <video
-        src={videoSrc}
-        muted
-        loop
-        preload="metadata"
-        loading="lazy"
-        onMouseOver={event => event.target.play()}
-        onMouseOut={event => event.target.pause()}
-        className="rounded-lg border border-white/10 w-full h-auto"
-      />
+  return (
+    <div className={`border border-white/20 rounded-xl p-1 md:p-2 flex flex-col gap-1 md:gap-2 hover:shadow-lg hover:shadow-white/10 transition-all duration-300 hover:scale-105 ${className}`}>
+      {showVideo && (
+        <video
+          src={videoSrc}
+          muted
+          loop
+          preload="metadata"
+          onMouseOver={(event) => event.target.play()}
+          onMouseOut={(event) => event.target.pause()}
+          className="rounded-lg border border-white/10 w-full h-auto"
+        />
+      )}
+
+      {showImage && (
+        <img
+          src={imageSrc}
+          alt={title}
+          loading="lazy"
+          className="rounded-lg border border-white/10 w-full h-auto object-cover"
+        />
+      )}
 
       <h3 className="text-lg md:text-xl">{title}</h3>
 
