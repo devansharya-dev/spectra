@@ -64,7 +64,7 @@ const NewPage = ({ activeDemo, setActiveDemo }) => {
               />
 
               {/* Center Tech Card: Minimalist & Clean */}
-              <div className="hidden lg:flex flex-col justify-end pb-12 border-l border-black/5 pl-12">
+              <div className="hidden lg:flex flex-col items-center justify-center text-center">
                 <h4 className="text-zinc-600 text-[10px] uppercase tracking-[0.4em] font-black mb-6">Core Engine</h4>
                 <p className="text-2xl font-light italic text-zinc-400 leading-snug">
                   "Visualizing <span className="text-white">Neural Pathways</span> in real-time."
