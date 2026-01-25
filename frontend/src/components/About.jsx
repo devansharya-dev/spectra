@@ -1,70 +1,119 @@
+import React from "react";
+import { motion } from "framer-motion";
+
 const About = () => {
+  const team = [
+    { 
+      name: "Shriyukt Gupta", 
+      role: "Lead Architect & AI/ML Specialist",
+      email: "shriyuktgupta@gmail.com",
+      linkedin: "https://linkedin.com/in/shriyukt"
+    },
+    { 
+      name: "Devansh Arya", 
+      role: "AI/ML Specialist & Full-stack Developer",
+      email: "devansharya12345@gmail.com",
+      linkedin: "https://www.linkedin.com/in/devansh-arya-415378305/"
+    },
+    { 
+      name: "Divya Adhikari", 
+      role: "Embedded Systems Specialist & Full-stack Engineer",
+      email: "divyaadikhari65@gmail.com",
+      linkedin: "https://www.linkedin.com/in/divya-adhikari1/"
+    },
+    { 
+      name: "Shubhanshi Negi", 
+      role: "AI & Backend Engineer",
+      email: "shubhanshinegi@gmail.com",
+      linkedin: "https://www.linkedin.com/in/shubhanshi-negi-0a4352338/"
+    },
+  ];
+
   return (
     <section
       id="about"
       data-scroll-section
-      className="w-full bg-[#D1DCD9] text-black px-6 md:px-10 lg:px-16 py-16 md:py-24 lg:py-32"
+      className="w-full bg-[#D1DCD9] text-black px-6 md:px-16 lg:px-24 py-24 md:py-32 lg:py-40 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold uppercase tracking-wide leading-tight">
-          Built by engineers.
-          <br />
-          Designed for humans.
-        </h2>
+        {/* Header Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start mb-32">
+          <motion.h2 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="text-5xl md:text-7xl lg:text-8xl font-['BebasNeue'] tracking-tight leading-[0.9] uppercase"
+          >
+            Built by engineers. <br />
+            <span className="text-zinc-500 italic">Designed for humans.</span>
+          </motion.h2>
 
-        <p className="mt-8 md:mt-10 max-w-4xl text-base md:text-lg leading-relaxed font-medium text-zinc-700">
-          We are a team of developers, designers, and engineers focused on building
-          technology that works in the real world.
-        </p>
-
-        <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-          <div className="text-center md:text-left">
-            <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-2">Human-first design</h3>
-            <p className="text-zinc-800 text-sm md:text-base leading-relaxed">
-              Technology should adapt to people — not the other way around.
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col gap-8"
+          >
+            <p className="text-xl md:text-2xl leading-relaxed font-medium text-zinc-800">
+              We are a team of developers, designers, and engineers focused on building 
+              technology that works in the real world.
             </p>
-          </div>
-
-          <div className="text-center md:text-left">
-            <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-2">Real-world intelligence</h3>
-            <p className="text-zinc-800 text-sm md:text-base leading-relaxed">
-              AI must understand context, not just process data.
-            </p>
-          </div>
-
-          <div className="text-center md:text-left">
-            <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-2">Built with intent</h3>
-            <p className="text-zinc-800 text-sm md:text-base leading-relaxed">
-              Every feature exists for a reason. No noise. No gimmicks.
-            </p>
-          </div>
+            <div className="h-[1px] w-full bg-black/10"></div>
+          </motion.div>
         </div>
 
-        {/* TEAM SECTION - Exact Design Match */}
-        <div className="mt-24 md:mt-32 pt-16 border-t border-black/10">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold uppercase tracking-wide leading-tight mb-12">
-            The Team
-            <br />
-            <span className="text-zinc-500 text-2xl md:text-3xl lg:text-4xl normal-case font-medium tracking-normal">
-              Augen by The NPCs
-            </span>
-          </h2>
+        {/* Team Section */}
+        <div className="pt-20 border-t border-black/10">
+          <div className="mb-16">
+            <h2 className="text-5xl md:text-7xl font-['BebasNeue'] tracking-tight uppercase mb-4">
+              The Team
+            </h2>
+            <div className="flex items-center gap-4">
+               <div className="w-12 h-[1px] bg-black"></div>
+               <span className="text-zinc-500 text-lg md:text-xl font-medium italic">Augen by The NPCs</span>
+            </div>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
-             {[
-              { name: "Shriyukt Gupta", role: "Lead Architect & AI/ML Specialist" },
-              { name: "Devansh Arya", role: "AI/ML Specialist & Full-stack Developer" },
-              { name: "Divya Adhikari", role: "Embedded Systems Specialist & Full-stack Engineer" },
-              { name: "Shubhanshi Negi", role: "AI & Backend Engineer" },
-            ].map((member, index) => (
-              <div key={index} className="text-center md:text-left">
-                <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+            {team.map((member, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="flex flex-col group"
+              >
+                <h3 className="text-xl font-bold uppercase tracking-tight mb-2 group-hover:text-zinc-600 transition-colors">
                   {member.name}
                 </h3>
-                <p className="text-zinc-800 text-sm md:text-base leading-relaxed">
+                <p className="text-zinc-600 text-sm font-medium leading-relaxed mb-6 h-12">
                   {member.role}
                 </p>
-              </div>
+                
+                {/* Visible & Clickable Email Text */}
+                <div className="mb-6">
+                  <a 
+                    href={`mailto:${member.email}`}
+                    className="text-[11px] font-bold text-black/40 hover:text-black transition-all border-b border-transparent hover:border-black pb-0.5 break-all"
+                  >
+                    {member.email}
+                  </a>
+                </div>
+                
+                {/* LinkedIn Link with In-icon */}
+                <div className="flex items-center gap-5 mt-auto">
+                  <a 
+                    href={member.linkedin} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors"
+                  >
+                    <span className="w-6 h-6 rounded-full border border-black/20 flex items-center justify-center group-hover:border-blue-600 transition-colors font-serif italic">in</span>
+                    LinkedIn
+                  </a>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>

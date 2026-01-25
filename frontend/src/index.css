@@ -139,3 +139,43 @@ a:hover ~ div[ref="cursorRef"],
 button:hover ~ div[ref="cursorRef"] {
   transform: scale(2.5) !important;
 }
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeUp {
+  animation: fadeUp 0.8s ease-out both;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out both;
+}
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Mobile smooth scroll fix */
+}
+
+/* Sabse important: Laggy blurs ko mobile par disable karo */
+@media (max-width: 768px) {
+  * {
+    backdrop-filter: none !important; 
+    -webkit-backdrop-filter: none !important;
+  }
+}

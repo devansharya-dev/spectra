@@ -1,6 +1,5 @@
 const Footer = () => {
   const scrollToSection = (id) => {
-    // Use Locomotive Scroll if available, fallback to native scrolling
     const scroll = window.locomotiveScroll;
     if (scroll) {
       scroll.scrollTo(id, {
@@ -17,52 +16,74 @@ const Footer = () => {
 
   return (
     <footer
-      id="contact"
       data-scroll-section
-      data-scroll
-      className="w-full bg-zinc-950 text-white px-4 md:px-8 lg:px-12 xl:px-20 py-28"
+      className="w-full bg-[#050505] text-white px-6 md:px-16 py-20 md:py-32 border-t border-white/5"
     >
-      <div className="flex flex-col md:flex-row justify-between gap-24">
-        <div className="md:w-1/2">
-          <h1 className="text-[6vw] leading-none uppercase font-['BebasNeue'] tracking-wider">
-            Augen
-          </h1>
-
-          <p className="mt-6 max-w-md text-gray-400 text-lg">
-            AI-powered smart glasses designed to enhance human perception
-            through real-time vision, voice, and intelligence.
-          </p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-16 md:gap-20">
+        
+        {/* Left Side: Massive Branding & Vision */}
+        <div className="w-full md:flex-1">
+          <div className="overflow-hidden">
+            <h1 
+              data-scroll 
+              data-scroll-speed="-0.1"
+              className="text-[22vw] md:text-[12vw] font-['BebasNeue'] tracking-tighter leading-[0.8] md:leading-[0.7] opacity-90"
+            >
+              AUGEN
+            </h1>
+          </div>
+          
+          <div className="mt-8 md:mt-12 max-w-lg">
+            <h2 className="text-zinc-600 uppercase tracking-[0.5em] text-[9px] md:text-[10px] font-black mb-4">
+              The Vision
+            </h2>
+            <p className="text-zinc-400 text-lg md:text-2xl font-light leading-snug md:leading-tight">
+              Empowering human potential through the world's most advanced 
+              context-aware intelligence.
+            </p>
+          </div>
         </div>
 
-        <div className="md:w-1/2 flex gap-8 md:gap-12 lg:gap-16 xl:gap-24">
-          <div>
-            <p className="mb-6 text-gray-500 uppercase tracking-wide text-sm">
-              Pages
-            </p>
-            <ul className="space-y-3 text-lg capitalize">
-              <li onClick={() => scrollToSection("#home")} className="cursor-pointer hover:text-white/80">Home</li>
-              <li onClick={() => scrollToSection("#features")} className="cursor-pointer hover:text-white/80">Features</li>
-              <li onClick={() => scrollToSection("#newpage")} className="cursor-pointer hover:text-white/80">Demo</li>
-              <li onClick={() => scrollToSection("#about")} className="cursor-pointer hover:text-white/80">About</li>
-            </ul>
-          </div>
-
-          <div>
-            <p className="mb-6 text-gray-500 uppercase tracking-wide text-sm">
-              Connect
-            </p>
-            <ul className="space-y-3 text-lg capitalize">
-              <li><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white/80">Instagram</a></li>
-              <li><a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white/80">LinkedIn</a></li>
-              <li><a href="https://x.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white/80">X / Twitter</a></li>
+        {/* Right Side: Navigation */}
+        <div className="w-full md:w-auto flex flex-col items-start md:items-end gap-12 md:gap-16">
+          <div className="text-left md:text-right w-full">
+            <h3 className="text-zinc-700 text-[10px] md:text-xs uppercase tracking-[0.4em] font-black mb-6 md:mb-8">
+              Directory
+            </h3>
+            <ul className="flex flex-col gap-4 md:gap-5">
+              {[
+                { label: "Home", id: "#home" },
+                { label: "Features", id: "#features" },
+                { label: "Demo", id: "#newpage" },
+                { label: "About", id: "#about" }
+              ].map((link) => (
+                <li 
+                  key={link.label}
+                  onClick={() => scrollToSection(link.id)}
+                  className="cursor-pointer group relative inline-block self-start md:self-end"
+                >
+                  <span className="text-3xl md:text-5xl font-['BebasNeue'] tracking-widest text-zinc-600 group-hover:text-white transition-all duration-500 uppercase italic">
+                    {link.label}
+                  </span>
+                  <span className="absolute bottom-1 left-0 w-0 h-[1px] bg-cyan-500 group-hover:w-full transition-all duration-500"></span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
       </div>
 
-      <div className="mt-24 pt-6 border-t border-white/10 flex justify-between text-sm text-gray-500">
-        <p>© 2025 Augen</p>
-        <p>Designed for the future.</p>
+      {/* Bottom Row: Legal & Info */}
+      <div className="mt-20 md:mt-32 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="flex flex-wrap justify-center gap-8 md:gap-12 text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-zinc-700 font-bold">
+          <span>© 2026 Augen Corp</span>
+          <span className="hidden md:inline text-zinc-800">|</span>
+          <span>India / Global</span>
+        </div>
+        
+        <div className="text-[9px] md:text-[10px] tracking-[0.4em] uppercase text-zinc-700 font-black italic">
+          Designed for the future
+        </div>
       </div>
     </footer>
   );
