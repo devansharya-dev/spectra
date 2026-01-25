@@ -1,6 +1,7 @@
 import { useState, useRef, memo } from "react";
 import { motion } from "framer-motion";
 
+<<<<<<< HEAD
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
   visible: (i) => ({
@@ -16,6 +17,34 @@ const fadeInUp = {
 
 const FeatureCard = memo(({ feature, index }) => {
   const isSecurity = feature.title === "Security";
+=======
+const Featured = () => {
+  const [activeFeature, setActiveFeature] = useState(null);
+  const [muted, setMuted] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const videoRef = useRef(null);
+
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const toggleMute = () => {
+    const next = !muted;
+    setMuted(next);
+    if (videoRef.current) {
+      videoRef.current.muted = next;
+    }
+  };
+>>>>>>> 208347cd59a58c0d349bf3a3b724e1ac0b351149
 
   return (
     <motion.div
@@ -112,6 +141,7 @@ const Featured = () => {
         ))}
       </div>
 
+<<<<<<< HEAD
       {/* Video Section remains same as per your logic */}
       <motion.div 
         initial={{ opacity: 0 }}
@@ -154,6 +184,99 @@ const Featured = () => {
           >
             {muted ? "Unmute" : "Mute"}
           </button>
+=======
+      {/* Feature Cards (ONLY 3, EQUAL SIZE) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-20">
+        <FeatureCard
+          title="Real-time Object Detection"
+          desc="Identifies and tracks objects instantly from live visual input."
+          imageSrc="/images/M.jpeg"
+          showButton={false}
+          className="h-full"
+        />
+
+        <FeatureCard
+          title="Speech to Text"
+          desc="Converts spoken language into accurate text in real time."
+          imageSrc="/images/i.jpeg"
+          showButton={false}
+          className="h-full"
+        />
+
+        <FeatureCard
+          title="Multilingual Speech Recognition"
+          desc="Detects speech and converts it into multilingual text in real time."
+          imageSrc="/images/h.jpeg"
+          showButton={false}
+          className="h-full"
+        />
+      </div>
+
+      {/* Demo Video Section */}
+      <div className="mt-12">
+        <h3 className="text-2xl md:text-3xl mb-6 text-center">
+          Here is the demo video
+        </h3>
+
+        <div className="flex justify-center">
+          <div
+            className={`relative w-full md:w-3/4 lg:w-1/2 overflow-hidden rounded-lg transition-all duration-300
+              ${expanded ? "max-h-[80vh]" : "max-h-[360px]"}`}
+          >
+            {/* Background Blur */}
+            <video
+              src="/video/demo1.mp4"
+              loop
+              muted
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-40"
+            />
+
+            {/* Main Video */}
+            <video
+              ref={videoRef}
+              src="/video/demo1.mp4"
+              loop
+              muted={muted}
+              preload="metadata"
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
+              className="relative z-10 w-full h-full object-contain bg-transparent"
+            />
+
+            {/* Play Button */}
+            {!isPlaying && (
+              <button
+                onClick={togglePlay}
+                className="absolute inset-0 flex items-center justify-center z-20"
+              >
+                <svg
+                  className="w-16 h-16 text-white bg-black/50 rounded-full"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </button>
+            )}
+
+            {/* Mute Button */}
+            <button
+              onClick={toggleMute}
+              className="absolute top-4 right-4 z-20 bg-black/70 text-white px-3 py-2 rounded-full hover:bg-black/90"
+            >
+              {muted ? "🔇" : "🔊"}
+            </button>
+
+            {/* Expand Button */}
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="absolute bottom-4 right-4 z-20 bg-black/70 text-white px-4 py-2 rounded-full hover:bg-black/90"
+            >
+              {expanded ? "Collapse" : "Expand"}
+            </button>
+          </div>
+>>>>>>> 208347cd59a58c0d349bf3a3b724e1ac0b351149
         </div>
       </motion.div>
     </section>
