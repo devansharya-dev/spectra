@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import FeatureCard from "./FeatureCard";
 import DemoSession from "./DemoSession";
 
 const NewPage = ({ activeDemo, setActiveDemo }) => {
   const handleTry = (feature) => {
     setActiveDemo(feature);
+    setTimeout(() => {
+      if (window.locomotiveScroll) {
+        window.locomotiveScroll.scrollTo('#newpage', {
+          offset: 0,
+          duration: 100, // Fast scroll
+          disableLerp: true 
+        });
+      } else {
+        const element = document.getElementById("newpage");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    }, 100);
   };
 
   return (
@@ -12,7 +26,7 @@ const NewPage = ({ activeDemo, setActiveDemo }) => {
       id="newpage"
       data-scroll-section
       /* Deep charcoal to black gradient for depth */
-      className="w-full bg-[#080808] text-white py-24 md:py-40 px-6 md:px-16 lg:px-24 overflow-hidden"
+      className="w-full min-h-screen bg-[#080808] text-white py-24 md:py-40 px-6 md:px-16 lg:px-24 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         {!activeDemo ? (
@@ -50,7 +64,7 @@ const NewPage = ({ activeDemo, setActiveDemo }) => {
               />
 
               {/* Center Tech Card: Minimalist & Clean */}
-              <div className="hidden lg:flex flex-col justify-end pb-12 border-l border-white/5 pl-12">
+              <div className="hidden lg:flex flex-col justify-end pb-12 border-l border-black/5 pl-12">
                 <h4 className="text-zinc-600 text-[10px] uppercase tracking-[0.4em] font-black mb-6">Core Engine</h4>
                 <p className="text-2xl font-light italic text-zinc-400 leading-snug">
                   "Visualizing <span className="text-white">Neural Pathways</span> in real-time."
@@ -61,10 +75,10 @@ const NewPage = ({ activeDemo, setActiveDemo }) => {
               </div>
 
               <FeatureCard
-                title="AI Insights"
+                title="Live Demo"
                 desc="Proactive data visualization."
                 videoSrc="/video/demo1.mp4"
-                onTry={() => handleTry("AI Insights")}
+                onTry={() => handleTry("Live Demo")}
               />
             </div>
           </div>
@@ -79,8 +93,9 @@ const NewPage = ({ activeDemo, setActiveDemo }) => {
                   <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_10px_cyan] animate-pulse"></div>
                   <span className="text-[10px] uppercase tracking-[0.5em] font-black text-zinc-600">Simulation Active</span>
                 </div>
-                <h3 className="text-5xl md:text-7xl font-['BebasNeue'] tracking-widest uppercase italic">
-                  {activeDemo} <span className="text-zinc-800">v1.0</span>
+                <h3 className="text-5xl md:text-7xl font-['BebasNeue'] tracking-widest uppercase">
+                  {activeDemo} <br />
+                  <span className="text-zinc-800 italic text-3xl md:text-5xl normal-case">of SMART GLASSES</span>
                 </h3>
               </div>
 

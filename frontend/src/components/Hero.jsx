@@ -17,9 +17,6 @@ const Hero = ({ setActiveDemo }) => {
   };
 
   const handleExplore = () => {
-    if (setActiveDemo) {
-      setActiveDemo("Live Demo");
-    }
     scrollToSection('#newpage');
   };
 

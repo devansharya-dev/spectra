@@ -25,9 +25,6 @@ export function Header({ setActiveDemo }) {
   };
 
   const handleExplore = () => {
-    if (setActiveDemo) {
-      setActiveDemo("Live Demo");
-    }
     scrollToSection('#newpage');
   };
 
