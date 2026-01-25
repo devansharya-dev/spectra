@@ -45,17 +45,10 @@ const NewPage = () => {
             {/* Premium Grid: Spacing is everything */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 md:gap-24">
               <FeatureCard
-<<<<<<< HEAD
                 title="Automation"
                 desc="Self-executing workflow logic."
                 videoSrc="/video/demo3.mp4"
                 onTry={() => handleTry("Automation")}
-=======
-                title="Object Detection"
-                desc="Detects and identifies objects in real time from live camera input, helping users understand their surroundings instantly."
-                imageSrc="/images/M.jpeg"
-                onTry={() => handleTry("automation")}
->>>>>>> 208347cd59a58c0d349bf3a3b724e1ac0b351149
               />
 
               {/* Center Tech Card: Minimalist & Clean */}
@@ -70,17 +63,10 @@ const NewPage = () => {
               </div>
 
               <FeatureCard
-<<<<<<< HEAD
                 title="AI Insights"
                 desc="Proactive data visualization."
                 videoSrc="/video/demo1.mp4"
                 onTry={() => handleTry("AI Insights")}
-=======
-                title="Speech to Text"
-                desc="Converts spoken language into accurate text in real time, enabling hands-free interaction and seamless communication."
-                imageSrc="/images/i.jpeg"
-                onTry={() => handleTry("insights")}
->>>>>>> 208347cd59a58c0d349bf3a3b724e1ac0b351149
               />
             </div>
           </div>

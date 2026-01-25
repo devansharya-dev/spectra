@@ -1,93 +1,31 @@
 import { useState, useRef, memo } from "react";
-import { motion } from "framer-motion";
-
-<<<<<<< HEAD
-const fadeInUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.1,
-      duration: 0.8,
-      ease: [0.215, 0.61, 0.355, 1],
-    },
-  }),
-};
+import { motion, AnimatePresence } from "framer-motion";
 
 const FeatureCard = memo(({ feature, index }) => {
-  const isSecurity = feature.title === "Security";
-=======
-const Featured = () => {
-  const [activeFeature, setActiveFeature] = useState(null);
-  const [muted, setMuted] = useState(true);
-  const [expanded, setExpanded] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const videoRef = useRef(null);
-
-  const togglePlay = () => {
-    if (!videoRef.current) return;
-
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
-
-  const toggleMute = () => {
-    const next = !muted;
-    setMuted(next);
-    if (videoRef.current) {
-      videoRef.current.muted = next;
-    }
-  };
->>>>>>> 208347cd59a58c0d349bf3a3b724e1ac0b351149
-
+  const isSecurity = feature?.title === "Security";
   return (
     <motion.div
-      custom={index}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
-      variants={fadeInUp}
-      /* HEIGHT FIX: Security card ke liye h-[450px] apply kiya hai */
-      className={`${feature.size} group relative overflow-hidden rounded-[2rem] bg-white border border-zinc-100 transition-all duration-500 hover:shadow-2xl ${
-        isSecurity ? "h-[350px] md:h-[450px]" : "h-[280px] md:h-[350px]"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      className={`${feature?.size || ""} group relative overflow-hidden rounded-[3.5rem] bg-white border border-zinc-100 transition-all duration-700 hover:shadow-[0_80px_100px_-20px_rgba(0,0,0,0.15)] ${
+        isSecurity ? "h-[400px] md:h-[500px]" : "h-[300px] md:h-[380px]"
       }`}
     >
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img
-          src={feature.img}
-          alt={feature.title}
-          loading="lazy"
-          className={`w-full h-full transition-all duration-1000 ease-out 
-            grayscale-0 md:grayscale md:group-hover:grayscale-0 
-            opacity-100 md:opacity-40 md:group-hover:opacity-100 
-            scale-105 group-hover:scale-100
-            ${isSecurity ? "object-cover object-center bg-zinc-50" : "object-cover"}
-          `}
+          src={feature?.img}
+          alt={feature?.title}
+          className={`w-full h-full transition-all duration-1000 ease-[0.22,1,0.36,1] grayscale-0 md:grayscale md:group-hover:grayscale-0 opacity-100 md:opacity-40 md:group-hover:opacity-100 scale-110 group-hover:scale-100 ${isSecurity ? "object-cover object-center" : "object-cover"}`}
         />
-        <div className={`absolute inset-0 transition-opacity duration-700 
-          ${isSecurity 
-            ? "bg-gradient-to-r from-white/70 via-transparent to-transparent" 
-            : "bg-white/20 md:bg-gradient-to-b md:from-white/80 md:via-white/20 md:to-transparent md:group-hover:opacity-0"}
-        `} />
+        <div className={`absolute inset-0 transition-opacity duration-700 ${isSecurity ? "bg-gradient-to-r from-white/90 via-white/20 to-transparent" : "bg-white/10 md:bg-gradient-to-b md:from-white/95 md:via-white/10 md:to-transparent md:group-hover:opacity-0"}`} />
       </div>
-
-      <div className="relative z-10 p-8 md:p-10 h-full flex flex-col justify-between pointer-events-none">
-        <div className="transform group-hover:-translate-y-2 transition-transform duration-500">
-          <h3 className="text-3xl md:text-4xl font-['BebasNeue'] tracking-wider text-zinc-900 italic uppercase leading-none">
-            {feature.title}
-          </h3>
-          <p className="text-zinc-500 text-[10px] uppercase tracking-[0.3em] mt-3 font-bold group-hover:text-black transition-colors">
-            {feature.desc}
-          </p>
-        </div>
-        <div className="hidden md:flex w-12 h-12 rounded-full border border-zinc-200 group-hover:border-black items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-          <span className="text-zinc-900 text-xl font-light">↗</span>
+      
+      <div className="relative z-10 p-12 h-full flex flex-col justify-between pointer-events-none">
+        <div className="transform group-hover:-translate-y-2 transition-transform duration-700">
+          <h3 className="text-4xl md:text-5xl font-['BebasNeue'] tracking-wider text-zinc-900 italic uppercase leading-[0.8]">{feature?.title}</h3>
+          <p className="text-zinc-400 text-[9px] md:text-[10px] uppercase tracking-[0.5em] mt-5 font-black group-hover:text-black transition-colors">{feature?.desc}</p>
         </div>
       </div>
     </motion.div>
@@ -117,166 +55,73 @@ const Featured = () => {
   ];
 
   return (
-    <section id="features" data-scroll-section className="w-full bg-[#fcfcfc] py-20 md:py-32 px-5 md:px-16 lg:px-24 overflow-hidden">
+    <section id="features" data-scroll-section className="w-full bg-[#f8f8f8] py-32 md:py-56 px-6 md:px-16 lg:px-24 overflow-hidden font-sans">
       
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="max-w-4xl mb-20"
-      >
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-[2px] bg-zinc-800"></div>
-          <span className="uppercase tracking-[0.4em] text-[10px] font-black text-zinc-500">Capabilities</span>
-        </div>
-        <h2 className="text-7xl md:text-9xl font-['BebasNeue'] tracking-tight leading-none uppercase text-zinc-900">
-          Augen <span className="text-zinc-400 italic">Vision</span>
+      <div className="max-w-7xl mx-auto mb-32">
+        <h2 className="text-[18vw] md:text-[14vw] font-['BebasNeue'] tracking-tighter leading-[0.7] uppercase text-zinc-900 italic">
+          Augen <span className="text-zinc-200 not-italic">Vision</span>
         </h2>
-      </motion.div>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 mb-32 items-end">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 mb-64 items-end max-w-7xl mx-auto">
         {features.map((f, i) => (
           <FeatureCard key={i} feature={f} index={i} />
         ))}
       </div>
 
-<<<<<<< HEAD
-      {/* Video Section remains same as per your logic */}
       <motion.div 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={{ opacity: 0, y: 100 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 1 }}
         className="w-full flex flex-col items-center"
       >
-        <div className="w-full flex items-center gap-8 mb-16">
-           <div className="h-[1px] flex-1 bg-zinc-200"></div>
-           <div className="flex flex-col items-center gap-2">
-             <span className="font-['BebasNeue'] text-4xl md:text-6xl tracking-[0.1em] text-zinc-900">Demo Video</span>
-             <span className="text-[10px] uppercase tracking-[0.4em] text-zinc-400 font-bold">Watch Augen in action</span>
-           </div>
-           <div className="h-[1px] flex-1 bg-zinc-200"></div>
+        <div className="flex flex-col items-center gap-6 mb-24 text-center">
+          <h3 className="text-6xl md:text-9xl font-['BebasNeue'] text-zinc-900 uppercase italic leading-none">Visual Showcase</h3>
         </div>
 
-        <div 
-          onClick={togglePlay}
-          className="relative w-full max-w-[320px] md:max-w-[420px] aspect-[9/16] bg-black rounded-[3rem] md:rounded-[4rem] overflow-hidden shadow-2xl cursor-pointer group border-[8px] md:border-[12px] border-white ring-1 ring-zinc-200"
-        >
-          <video
-            ref={videoRef}
-            src="/video/demo2.mp4"
-            loop
-            muted={muted}
-            playsInline
-            className={`w-full h-full object-cover transition-all duration-1000 ${isPlaying ? 'scale-100 opacity-100' : 'scale-105 opacity-70 blur-[1px]'}`}
-          />
-          {!isPlaying && (
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-              <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center transition-transform group-hover:scale-110">
-                <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1"></div>
-              </div>
-            </div>
-          )}
-          <button 
-            onClick={(e) => { e.stopPropagation(); setMuted(!muted); }}
-            className="absolute bottom-10 right-1/2 translate-x-1/2 bg-white/90 backdrop-blur-md px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-black shadow-xl z-20"
+        {/* --- VIDEO CONTAINER WITH SIDE SHADOWS & GLOW --- */}
+        <div className="relative w-full max-w-[380px] md:max-w-[450px]">
+          
+          {/* Side Neon Shadow/Glow (Left & Right) */}
+          <div className={`absolute -inset-x-12 inset-y-20 bg-cyan-500/20 blur-[100px] transition-opacity duration-1000 ${isPlaying ? 'opacity-100' : 'opacity-0'}`}></div>
+          <div className={`absolute -inset-x-4 inset-y-10 bg-black/10 blur-3xl transition-opacity duration-700`}></div>
+
+          <div 
+            onClick={togglePlay}
+            /* Premium Shadow for the Box itself */
+            className="relative z-10 w-full h-[600px] md:h-[780px] bg-black rounded-[4rem] overflow-hidden shadow-[0_100px_100px_-50px_rgba(0,0,0,0.6)] border-[12px] border-white ring-1 ring-zinc-200 cursor-pointer"
           >
-            {muted ? "Unmute" : "Mute"}
-          </button>
-=======
-      {/* Feature Cards (ONLY 3, EQUAL SIZE) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-20">
-        <FeatureCard
-          title="Real-time Object Detection"
-          desc="Identifies and tracks objects instantly from live visual input."
-          imageSrc="/images/M.jpeg"
-          showButton={false}
-          className="h-full"
-        />
-
-        <FeatureCard
-          title="Speech to Text"
-          desc="Converts spoken language into accurate text in real time."
-          imageSrc="/images/i.jpeg"
-          showButton={false}
-          className="h-full"
-        />
-
-        <FeatureCard
-          title="Multilingual Speech Recognition"
-          desc="Detects speech and converts it into multilingual text in real time."
-          imageSrc="/images/h.jpeg"
-          showButton={false}
-          className="h-full"
-        />
-      </div>
-
-      {/* Demo Video Section */}
-      <div className="mt-12">
-        <h3 className="text-2xl md:text-3xl mb-6 text-center">
-          Here is the demo video
-        </h3>
-
-        <div className="flex justify-center">
-          <div
-            className={`relative w-full md:w-3/4 lg:w-1/2 overflow-hidden rounded-lg transition-all duration-300
-              ${expanded ? "max-h-[80vh]" : "max-h-[360px]"}`}
-          >
-            {/* Background Blur */}
-            <video
-              src="/video/demo1.mp4"
-              loop
-              muted
-              preload="metadata"
-              className="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-40"
-            />
-
-            {/* Main Video */}
             <video
               ref={videoRef}
-              src="/video/demo1.mp4"
+              src="/video/demo2.mp4"
               loop
               muted={muted}
-              preload="metadata"
-              onPlay={() => setIsPlaying(true)}
-              onPause={() => setIsPlaying(false)}
-              className="relative z-10 w-full h-full object-contain bg-transparent"
+              playsInline
+              className={`w-full h-full object-contain transition-all duration-700 ${isPlaying ? 'opacity-100' : 'opacity-80 blur-[2px]'}`}
             />
 
-            {/* Play Button */}
-            {!isPlaying && (
-              <button
-                onClick={togglePlay}
-                className="absolute inset-0 flex items-center justify-center z-20"
-              >
-                <svg
-                  className="w-16 h-16 text-white bg-black/50 rounded-full"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
+            <AnimatePresence>
+              {!isPlaying && (
+                <motion.div 
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-[4px] z-30"
                 >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </button>
-            )}
+                  <div className="w-24 h-24 rounded-full bg-white/10 backdrop-blur-3xl border border-white/20 flex items-center justify-center">
+                    <div className="w-0 h-0 border-t-[18px] border-t-transparent border-l-[30px] border-l-white border-b-[18px] border-b-transparent ml-3"></div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-            {/* Mute Button */}
-            <button
-              onClick={toggleMute}
-              className="absolute top-4 right-4 z-20 bg-black/70 text-white px-3 py-2 rounded-full hover:bg-black/90"
-            >
-              {muted ? "🔇" : "🔊"}
-            </button>
-
-            {/* Expand Button */}
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="absolute bottom-4 right-4 z-20 bg-black/70 text-white px-4 py-2 rounded-full hover:bg-black/90"
-            >
-              {expanded ? "Collapse" : "Expand"}
-            </button>
+            <div className="absolute bottom-10 left-0 right-0 px-10 z-40">
+               <button 
+                  onClick={(e) => { e.stopPropagation(); setMuted(!muted); }}
+                  className="w-full py-5 bg-white/95 backdrop-blur-3xl rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-black shadow-2xl active:scale-95 transition-all hover:bg-cyan-500 hover:text-white"
+               >
+                  {muted ? "Activate Audio" : "Silence Feed"}
+               </button>
+            </div>
           </div>
->>>>>>> 208347cd59a58c0d349bf3a3b724e1ac0b351149
         </div>
       </motion.div>
     </section>

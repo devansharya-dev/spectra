@@ -44,7 +44,6 @@ const Footer = () => {
           </div>
         </div>
 
-<<<<<<< HEAD
         {/* Right Side: Navigation */}
         <div className="w-full md:w-auto flex flex-col items-start md:items-end gap-12 md:gap-16">
           <div className="text-left md:text-right w-full">
@@ -69,38 +68,6 @@ const Footer = () => {
                   <span className="absolute bottom-1 left-0 w-0 h-[1px] bg-cyan-500 group-hover:w-full transition-all duration-500"></span>
                 </li>
               ))}
-=======
-        <div className="md:w-1/2 flex gap-8 md:gap-12 lg:gap-16 xl:gap-24">
-          <div>
-            <p className="mb-6 text-gray-500 uppercase tracking-wide text-sm">
-              Pages
-            </p>
-            <ul className="space-y-3 text-lg capitalize">
-              <li
-                onClick={() => scrollToSection("#home")}
-                className="cursor-pointer hover:text-white/80"
-              >
-                Home
-              </li>
-              <li
-                onClick={() => scrollToSection("#features")}
-                className="cursor-pointer hover:text-white/80"
-              >
-                Features
-              </li>
-              <li
-                onClick={() => scrollToSection("#newpage")}
-                className="cursor-pointer hover:text-white/80"
-              >
-                Demo
-              </li>
-              <li
-                onClick={() => scrollToSection("#about")}
-                className="cursor-pointer hover:text-white/80"
-              >
-                About
-              </li>
->>>>>>> 208347cd59a58c0d349bf3a3b724e1ac0b351149
             </ul>
           </div>
         </div>
