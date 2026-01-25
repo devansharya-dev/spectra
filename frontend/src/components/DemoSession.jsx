@@ -47,23 +47,6 @@ const DemoSession = ({ onExit, mode }) => {
     return () => stopDevices();
   }, []);
 
-  // =============================
-  // PROACTIVE AUTO-RUN
-  // =============================
-  useEffect(() => {
-    if (!active || !mode) return;
-
-    const timer = setTimeout(() => {
-      if (mode === "AI Insights") {
-        handleAnalyzeScene();
-      } else if (mode === "Live Demo") {
-        if (!isRecording) startRecording();
-      }
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [active, mode]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const stopDevices = () => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((t) => t.stop());
@@ -222,10 +205,9 @@ const DemoSession = ({ onExit, mode }) => {
       <div className="w-full md:w-[340px] lg:w-[400px] bg-[#0c0c0c] border-t md:border-t-0 md:border-l border-white/10 flex flex-col p-6 order-2 shrink-0 overflow-y-auto">
         
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-4 md:mb-8">
            <h3 className="text-xl md:text-2xl font-['BebasNeue'] tracking-widest text-white uppercase italic flex items-center gap-2">
              Command Center
-             {mode && <span className="text-[9px] not-italic font-bold text-cyan-400 border border-cyan-500/30 px-1.5 py-0.5 rounded bg-cyan-900/10 tracking-widest">AUTO</span>}
            </h3>
            {loading && (
              <span className="text-[9px] uppercase tracking-widest text-cyan-400 animate-pulse">Processing...</span>

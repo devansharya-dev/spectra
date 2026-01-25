@@ -1,11 +1,23 @@
 import { motion } from "framer-motion";
 
-const Hero = () => {
-  const scrollToFeatures = () => {
-    document.querySelector('#features')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+const Hero = ({ setActiveDemo }) => {
+  const scrollToSection = (id) => {
+    const scroll = window.locomotiveScroll;
+    if (scroll) {
+      scroll.scrollTo(id, {
+        offset: -100,
+        duration: 800,
+      });
+    } else {
+      const element = document.querySelector(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
+  const handleExplore = () => {
+    scrollToSection('#newpage');
   };
 
   return (
@@ -76,7 +88,7 @@ const Hero = () => {
           className="mt-12 flex flex-col sm:flex-row gap-5 justify-center items-center"
         >
           <button 
-            onClick={() => document.querySelector('#newpage')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={handleExplore}
             className="group relative px-10 py-4 bg-white text-black font-black text-[10px] uppercase tracking-[0.3em] rounded-full overflow-hidden transition-all duration-500"
           >
             <span className="relative z-10 group-hover:text-white transition-colors duration-300">Explore Capabilities</span>
@@ -84,7 +96,7 @@ const Hero = () => {
           </button>
 
           <button 
-            onClick={scrollToFeatures}
+            onClick={() => scrollToSection('#features')}
             className="px-10 py-4 border border-zinc-800 text-white font-black text-[10px] uppercase tracking-[0.3em] rounded-full hover:bg-white hover:text-black transition-all duration-500 shadow-xl"
           >
             View Demonstration
