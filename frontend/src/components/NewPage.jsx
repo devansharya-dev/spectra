@@ -56,30 +56,38 @@ const NewPage = ({ activeDemo, setActiveDemo }) => {
 
             {/* Premium Grid: Spacing is everything */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 md:gap-24">
-              <FeatureCard
-                title="Live Demo"
-                desc="Self-executing workflow logic."
-                videoSrc="/video/demo3.mp4"
-                onTry={() => handleTry("Live Demo")}
-              />
-
-              {/* Center Tech Card: Minimalist & Clean */}
-              <div className="hidden lg:flex flex-col justify-end pb-12 border-l border-black/5 pl-12">
-                <h4 className="text-zinc-600 text-[10px] uppercase tracking-[0.4em] font-black mb-6">Core Engine</h4>
-                <p className="text-2xl font-light italic text-zinc-400 leading-snug">
-                  "Visualizing <span className="text-white">Neural Pathways</span> in real-time."
-                </p>
-                <div className="mt-10 flex gap-2">
-                  {[1, 2, 3].map(i => <div key={i} className="w-1 h-1 rounded-full bg-zinc-800"></div>)}
-                </div>
+              <div className="w-full max-w-md mx-auto">
+                <FeatureCard
+                  title="Live Demo"
+                  desc="Self-executing workflow logic."
+                  videoSrc="/video/demo3.mp4"
+                  onTry={() => handleTry("Live Demo")}
+                />
               </div>
 
-              <FeatureCard
-                title="Live Demo"
-                desc="Proactive data visualization."
-                videoSrc="/video/demo1.mp4"
-                onTry={() => handleTry("Live Demo")}
-              />
+              {/* Center Tech Card: Minimalist & Clean */}
+              <div className="hidden lg:flex flex-col items-center justify-center text-center h-full py-12 px-8">
+                <div className="w-px h-20 bg-gradient-to-b from-transparent via-white/20 to-transparent mb-10"></div>
+                
+                <h4 className="text-cyan-500 text-[10px] uppercase tracking-[0.4em] font-bold mb-8">
+                  Core Engine
+                </h4>
+
+                <p className="text-3xl font-light italic text-zinc-400 leading-tight mb-10">
+                  "Visualizing <br/> <span className="text-white font-normal not-italic">Neural Pathways</span> <br/> in real-time."
+                </p>
+                
+                <div className="w-px h-20 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+              </div>
+
+              <div className="w-full max-w-md mx-auto">
+                <FeatureCard
+                  title="AI Insights"
+                  desc="Proactive data visualization."
+                  videoSrc="/video/demo1.mp4"
+                  onTry={() => handleTry("AI Insights")}
+                />
+              </div>
             </div>
           </div>
         ) : (
