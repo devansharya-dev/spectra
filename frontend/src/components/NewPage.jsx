@@ -45,10 +45,10 @@ const NewPage = () => {
             {/* Premium Grid: Spacing is everything */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 md:gap-24">
               <FeatureCard
-                title="Automation"
+                title="Live Demo"
                 desc="Self-executing workflow logic."
                 videoSrc="/video/demo3.mp4"
-                onTry={() => handleTry("Automation")}
+                onTry={() => handleTry("Live Demo")}
               />
 
               {/* Center Tech Card: Minimalist & Clean */}
@@ -82,7 +82,7 @@ const NewPage = () => {
                   <span className="text-[10px] uppercase tracking-[0.5em] font-black text-zinc-600">Simulation Active</span>
                 </div>
                 <h3 className="text-5xl md:text-7xl font-['BebasNeue'] tracking-widest uppercase italic">
-                  {activeDemo} <span className="text-zinc-800">v2.0</span>
+                  {activeDemo} <span className="text-zinc-800">v1.0</span>
                 </h3>
               </div>
 
@@ -98,19 +98,19 @@ const NewPage = () => {
             </div>
 
             {/* Simulation Canvas: Clean Borders, No Clutter */}
-            <div className="w-full max-w-6xl aspect-video bg-[#0c0c0c] rounded-[4rem] border border-white/5 shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] overflow-hidden relative">
+            <div className="w-full max-w-6xl bg-[#0c0c0c] rounded-[2rem] md:rounded-[4rem] border border-white/5 shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] overflow-hidden relative flex flex-col">
                {/* Decorative corner accents */}
-               <div className="absolute top-10 left-10 w-4 h-4 border-t border-l border-white/20"></div>
-               <div className="absolute bottom-10 right-10 w-4 h-4 border-b border-r border-white/20"></div>
+               <div className="absolute top-10 left-10 w-4 h-4 border-t border-l border-white/20 z-20 pointer-events-none"></div>
+               <div className="absolute bottom-10 right-10 w-4 h-4 border-b border-r border-white/20 z-20 pointer-events-none"></div>
                
                {/* Logic remains safe here */}
-               <DemoSession onExit={() => setActiveDemo(null)} />
+               <DemoSession mode={activeDemo} onExit={() => setActiveDemo(null)} />
             </div>
 
             <div className="opacity-20 flex gap-12 items-center">
-              <span className="text-[9px] uppercase tracking-[0.8em] font-bold italic">Augen OS Simulation</span>
+              <span className="text-[9px] uppercase tracking-[0.8em] font-bold italic">Augen Glasses Simulation</span>
               <div className="w-20 h-[1px] bg-white"></div>
-              <span className="text-[9px] uppercase tracking-[0.8em] font-bold italic">Neural Link: Stable</span>
+              <span className="text-[9px] uppercase tracking-[0.8em] font-bold italic">By THE NPC'S</span>
             </div>
           </div>
         )}

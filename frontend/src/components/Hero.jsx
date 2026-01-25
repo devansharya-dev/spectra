@@ -76,6 +76,7 @@ const Hero = () => {
           className="mt-12 flex flex-col sm:flex-row gap-5 justify-center items-center"
         >
           <button 
+            onClick={() => document.querySelector('#newpage')?.scrollIntoView({ behavior: 'smooth' })}
             className="group relative px-10 py-4 bg-white text-black font-black text-[10px] uppercase tracking-[0.3em] rounded-full overflow-hidden transition-all duration-500"
           >
             <span className="relative z-10 group-hover:text-white transition-colors duration-300">Explore Capabilities</span>

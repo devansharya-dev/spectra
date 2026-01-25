@@ -52,19 +52,19 @@ export function Header() {
       >
         {/* Logo */}
         <div 
-          className="text-xl font-bold tracking-tighter text-white cursor-pointer select-none"
+          className="text-4xl font-['BebasNeue'] tracking-wide text-white cursor-pointer select-none"
           onClick={() => scrollToSection('#home')}
         >
           AUGEN
         </div>
 
         {/* Desktop Nav - Clean & Fast */}
-        <nav className="hidden lg:flex items-center space-x-6">
+        <nav className="hidden lg:flex items-center space-x-8">
           {navItems.map((item) => (
             <button
               key={item.name}
               onClick={() => scrollToSection(item.href)}
-              className="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-500 hover:text-white transition-colors"
+              className="text-xl font-['BebasNeue'] uppercase tracking-widest text-zinc-500 hover:text-white transition-colors"
             >
               {item.name}
             </button>
@@ -75,8 +75,8 @@ export function Header() {
         <div className="hidden lg:block">
           <button 
             onClick={() => scrollToSection('#newpage')}
-            className={`bg-white text-black font-black uppercase tracking-widest transition-all duration-300 rounded-full hover:bg-cyan-400
-              ${isScrolled ? 'px-5 py-1.5 text-[9px]' : 'px-7 py-2.5 text-[10px]'}
+            className={`bg-white text-black font-['BebasNeue'] uppercase tracking-widest transition-all duration-300 rounded-full hover:bg-cyan-400
+              ${isScrolled ? 'px-6 py-2 text-lg' : 'px-8 py-3 text-xl'}
             `}
           >
             Explore
@@ -101,7 +101,7 @@ export function Header() {
                   scrollToSection(item.href);
                   setIsMobileMenuOpen(false);
                 }}
-                className="text-2xl font-bold tracking-tighter text-zinc-400 text-left px-4"
+                className="text-4xl font-['BebasNeue'] tracking-widest text-zinc-400 text-left px-4"
               >
                 {item.name}
               </button>

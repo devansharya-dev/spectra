@@ -48,10 +48,10 @@ const Featured = () => {
   };
 
   const features = [
-    { title: "Automation", desc: "Intelligent workflows.", img: "/images/echo.png", size: "md:col-span-2" },
-    { title: "AI Insights", desc: "Instant data clarity.", img: "/images/obj.jpeg", size: "md:col-span-1" },
-    { title: "Real-time Sync", desc: "Live updates.", img: "/images/gg.jpeg", size: "md:col-span-1" },
-    { title: "Security", desc: "Safe by design.", img: "/images/echo3.jpeg", size: "md:col-span-4" },
+    { title: "Automation", desc: "Intelligent workflows.", img: "/images/automation.png", size: "md:col-span-2 lg:col-span-2" },
+    { title: "AI Insights", desc: "Instant data clarity.", img: "/images/AI_Insights_2.png", size: "md:col-span-1 lg:col-span-1" },
+    { title: "Real-time Sync", desc: "Live updates.", img: "/images/real-time-sync.png", size: "md:col-span-1 lg:col-span-1" },
+    { title: "Security", desc: "Safe by design.", img: "/images/security.png", size: "md:col-span-2 lg:col-span-4" },
   ];
 
   return (
@@ -63,7 +63,7 @@ const Featured = () => {
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 mb-64 items-end max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-64 items-end max-w-7xl mx-auto">
         {features.map((f, i) => (
           <FeatureCard key={i} feature={f} index={i} />
         ))}
