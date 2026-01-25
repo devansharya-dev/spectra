@@ -55,7 +55,7 @@ const NewPage = ({ activeDemo, setActiveDemo }) => {
             </div>
 
             {/* Premium Grid: Spacing is everything */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 md:gap-24">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-20 md:gap-32">
               <FeatureCard
                 title="Live Demo"
                 desc="Self-executing workflow logic."
@@ -75,10 +75,10 @@ const NewPage = ({ activeDemo, setActiveDemo }) => {
               </div>
 
               <FeatureCard
-                title="Live Demo"
+                title="AI Insights"
                 desc="Proactive data visualization."
                 videoSrc="/video/demo1.mp4"
-                onTry={() => handleTry("Live Demo")}
+                onTry={() => handleTry("AI Insights")}
               />
             </div>
           </div>

@@ -30,7 +30,7 @@ const FeatureCard = ({
 
   return (
     <div
-      className={`border border-white/20 rounded-xl p-1 md:p-2 flex flex-col gap-1 md:gap-2 transition-all duration-300 ease-out hover:shadow-lg hover:shadow-white/10 hover:-translate-y-1 hover:scale-[1.03] ${className}`}
+      className={`border border-white/20 rounded-xl p-4 md:p-6 flex flex-col gap-4 md:gap-6 transition-all duration-300 ease-out hover:shadow-lg hover:shadow-white/10 hover:-translate-y-1 hover:scale-[1.03] ${className}`}
     >
       {/* Video Support */}
       {hasVideo && (
@@ -58,18 +58,18 @@ const FeatureCard = ({
       )}
 
       <div className="p-2 flex flex-col flex-grow">
-        <h3 className="text-lg md:text-xl text-white font-medium">
+        <h3 className="text-xl md:text-2xl text-white font-medium">
           {title}
         </h3>
 
-        <p className="text-[#D1DCD9] text-sm md:text-base mt-1">
+        <p className="text-[#D1DCD9] text-base md:text-lg mt-2">
           {desc}
         </p>
 
         {showButton && (
           <button
             onClick={onTry}
-            className="mt-auto border border-white rounded-full px-4 md:px-5 py-2 text-sm md:text-base text-white transition-all duration-300 hover:bg-white hover:text-black hover:scale-105"
+            className="mt-8 border border-white rounded-full px-6 md:px-8 py-3 text-sm md:text-base text-white transition-all duration-300 hover:bg-white hover:text-black hover:scale-105 uppercase tracking-widest font-bold"
           >
             Try Demo
           </button>

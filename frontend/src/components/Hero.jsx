@@ -85,7 +85,7 @@ const Hero = ({ setActiveDemo }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.8 }}
-          className="mt-12 flex flex-col sm:flex-row gap-5 justify-center items-center"
+          className="mt-12 flex justify-center items-center"
         >
           <button 
             onClick={handleExplore}
@@ -93,13 +93,6 @@ const Hero = ({ setActiveDemo }) => {
           >
             <span className="relative z-10 group-hover:text-white transition-colors duration-300">Explore Capabilities</span>
             <div className="absolute inset-0 bg-cyan-600 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
-          </button>
-
-          <button 
-            onClick={() => scrollToSection('#features')}
-            className="px-10 py-4 border border-zinc-800 text-white font-black text-[10px] uppercase tracking-[0.3em] rounded-full hover:bg-white hover:text-black transition-all duration-500 shadow-xl"
-          >
-            View Demonstration
           </button>
         </motion.div>
       </div>
