@@ -64,13 +64,28 @@ const NewPage = ({ activeDemo, setActiveDemo }) => {
               />
 
               {/* Center Tech Card: Minimalist & Clean */}
-              <div className="hidden lg:flex flex-col items-center justify-center text-center">
-                <h4 className="text-zinc-600 text-[10px] uppercase tracking-[0.4em] font-black mb-6">Core Engine</h4>
-                <p className="text-2xl font-light italic text-zinc-400 leading-snug">
-                  "Visualizing <span className="text-white">Neural Pathways</span> in real-time."
+              <div className="hidden lg:flex flex-col items-center justify-center text-center h-full py-12">
+                <div className="w-px h-24 bg-gradient-to-b from-transparent via-white/10 to-transparent mb-8"></div>
+                
+                <h4 className="text-cyan-500 text-xs uppercase tracking-[0.4em] font-bold mb-6">Core Engine</h4>
+                
+                <p className="text-4xl font-light italic text-zinc-300 leading-tight max-w-sm mx-auto">
+                  "Visualizing <br/> <span className="text-white font-normal not-italic">Neural Pathways</span> <br/> in real-time."
                 </p>
-                <div className="mt-10 flex gap-2">
-                  {[1, 2, 3].map(i => <div key={i} className="w-1 h-1 rounded-full bg-zinc-800"></div>)}
+
+                <div className="mt-12 grid grid-cols-3 gap-8 border-t border-white/5 pt-8 w-full max-w-[280px]">
+                    <div className="flex flex-col items-center gap-2">
+                        <span className="text-lg font-bold text-white">5ms</span>
+                        <span className="text-[8px] uppercase tracking-widest text-zinc-600">Latency</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                         <span className="text-lg font-bold text-white">99%</span>
+                         <span className="text-[8px] uppercase tracking-widest text-zinc-600">Accuracy</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                         <span className="text-lg font-bold text-white">60hz</span>
+                         <span className="text-[8px] uppercase tracking-widest text-zinc-600">Refresh</span>
+                    </div>
                 </div>
               </div>
 
