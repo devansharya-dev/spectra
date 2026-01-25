@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import LocomotiveScroll from 'locomotive-scroll';
 import About from './components/About';
 import Features from './components/FeaturesSection';
@@ -6,8 +6,10 @@ import Footer from './components/Footer';
 import { Header } from './components/Header';
 import Hero from './components/Hero';
 import NewPage from './components/NewPage';
+
 function App() {
   const scrollRef = useRef(null);
+  const [activeDemo, setActiveDemo] = useState(null);
 
   useEffect(() => {
     let scroll;
@@ -62,10 +64,10 @@ function App() {
 
   return (
     <div ref={scrollRef} data-scroll-container className="bg-zinc-900 text-gray-100">
-      <div><Header /></div>
-      <Hero />
+      <div><Header setActiveDemo={setActiveDemo} /></div>
+      <Hero setActiveDemo={setActiveDemo} />
       <Features />
-      <NewPage />
+      <NewPage activeDemo={activeDemo} setActiveDemo={setActiveDemo} />
       <About />
       <Footer />
     </div>

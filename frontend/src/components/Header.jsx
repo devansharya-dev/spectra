@@ -7,7 +7,7 @@ const navItems = [
   { name: 'About', href: '#about' },
 ];
 
-export function Header() {
+export function Header({ setActiveDemo }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -22,6 +22,13 @@ export function Header() {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
+  };
+
+  const handleExplore = () => {
+    if (setActiveDemo) {
+      setActiveDemo("Live Demo");
+    }
+    scrollToSection('#newpage');
   };
 
   useEffect(() => {
@@ -74,7 +81,7 @@ export function Header() {
         {/* Action Button */}
         <div className="hidden lg:block">
           <button 
-            onClick={() => scrollToSection('#newpage')}
+            onClick={handleExplore}
             className={`bg-white text-black font-['BebasNeue'] uppercase tracking-widest transition-all duration-300 rounded-full hover:bg-cyan-400
               ${isScrolled ? 'px-6 py-2 text-lg' : 'px-8 py-3 text-xl'}
             `}

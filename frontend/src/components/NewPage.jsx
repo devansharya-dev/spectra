@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import FeatureCard from "./FeatureCard";
 import DemoSession from "./DemoSession";
 
-const NewPage = () => {
-  const [activeDemo, setActiveDemo] = useState(null);
-
+const NewPage = ({ activeDemo, setActiveDemo }) => {
   const handleTry = (feature) => {
     setActiveDemo(feature);
   };
