@@ -55,35 +55,37 @@ const NewPage = ({ activeDemo, setActiveDemo }) => {
             </div>
 
             {/* Premium Grid: Spacing is everything */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 md:gap-16">
-              <div className="lg:col-span-2">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 md:gap-24">
+              <div className="w-full max-w-md mx-auto">
                 <FeatureCard
                   title="Live Demo"
                   desc="Self-executing workflow logic."
                   videoSrc="/video/demo3.mp4"
                   onTry={() => handleTry("Live Demo")}
-                  className="h-full"
                 />
               </div>
 
               {/* Center Tech Card: Minimalist & Clean */}
-              <div className="hidden lg:flex lg:col-span-1 flex-col items-center justify-center text-center h-full py-12">
-                <div className="w-px h-32 bg-gradient-to-b from-transparent via-white/20 to-transparent mb-12"></div>
+              <div className="hidden lg:flex flex-col items-center justify-center text-center h-full py-12 px-8">
+                <div className="w-px h-20 bg-gradient-to-b from-transparent via-white/20 to-transparent mb-10"></div>
                 
-                <h4 className="text-cyan-500 text-[10px] uppercase tracking-[0.4em] font-bold mb-8 rotate-180" style={{ writingMode: 'vertical-rl' }}>
+                <h4 className="text-cyan-500 text-[10px] uppercase tracking-[0.4em] font-bold mb-8">
                   Core Engine
                 </h4>
+
+                <p className="text-3xl font-light italic text-zinc-400 leading-tight mb-10">
+                  "Visualizing <br/> <span className="text-white font-normal not-italic">Neural Pathways</span> <br/> in real-time."
+                </p>
                 
-                <div className="w-px h-32 bg-gradient-to-b from-transparent via-white/20 to-transparent mt-12"></div>
+                <div className="w-px h-20 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
               </div>
 
-              <div className="lg:col-span-2">
+              <div className="w-full max-w-md mx-auto">
                 <FeatureCard
                   title="AI Insights"
                   desc="Proactive data visualization."
                   videoSrc="/video/demo1.mp4"
                   onTry={() => handleTry("AI Insights")}
-                  className="h-full"
                 />
               </div>
             </div>
